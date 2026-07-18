@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nicholasgasior/tauri-config-schema/tauri-v2/schema.json",
+  "identifier": "default",
+  "description": "ClassicPOS desktop app capabilities",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "shell:allow-execute",
+    "shell:allow-spawn",
+    "shell:allow-stdin-write",
+    "shell:default",
+    "store:default",
+    "updater:default",
+    "dialog:default",
+    "notification:default",
+    "process:default",
+    "fs:default"
+  ]
+}

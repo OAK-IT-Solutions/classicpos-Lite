@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+desktop/dist/
+desktop/buildroot/
+desktop/pkgroot/
+desktop/buildoutput/
+desktop/downloads/
+desktop/log/
+desktop/spc*
+desktop/spc.exe
+
+# Backend build
+backend/public/build/
+backend/storage/framework/cache/*
+!backend/storage/framework/cache/.gitignore
+backend/storage/framework/sessions/*
+!backend/storage/framework/sessions/.gitignore
+backend/storage/framework/views/*
+backend/storage/logs/*
+!backend/storage/logs/.gitignore
+backend/bootstrap/cache/*.php
+
+# Environment
+backend/.env
+backend/.env.backup
+backend/.env.sqlite-test
+backend/.env.pgsql-backup
+backend/.env.test
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop/node_modules/
+
+# Rust
+desktop/src-tauri/target/
+desktop/src-tauri/binaries/php-*
+
+# Test files
+backend/test_license.php
+backend/add_route.php

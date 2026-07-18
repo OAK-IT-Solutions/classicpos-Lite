@@ -1,0 +1,45 @@
+# ClassicPOS Desktop — Static PHP Build Configuration
+# Build with: ./spc build
+# Or: spc.exe build (Windows)
+
+php-version: 8.4
+
+extensions:
+  # Database
+  - pdo_sqlite
+  - sqlite3
+  # Core PHP
+  - bcmath
+  - ctype
+  - dom
+  - fileinfo
+  - filter
+  - iconv
+  - mbstring
+  - pcntl
+  - session
+  - tokenizer
+  # Encryption & Security
+  - openssl
+  - sodium
+  # HTTP & Network
+  - curl
+  # XML Processing
+  - libxml
+  - simplexml
+  - xml
+  - xmlreader
+  - xmlwriter
+  # Compression
+  - zip
+  - zlib
+  # Image Processing (for receipts/logos)
+  - gd
+  # JSON (built-in since PHP 8.0)
+  - json
+
+sapi:
+  - cli
+
+download-options:
+  parallel: 10

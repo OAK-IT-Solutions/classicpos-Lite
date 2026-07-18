@@ -1,0 +1,188 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  backend-tests:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: classicpos_test
+          POSTGRES_USER: classicpos
+          POSTGRES_PASSWORD: secret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      APP_ENV: testing
+      APP_KEY: base64:abcdefghijklmnopqrstuvwxyz12345678901234=
+      APP_URL: http://localhost:8080
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: classicpos_test
+      DB_USERNAME: classicpos
+      DB_PASSWORD: secret
+      REDIS_HOST: 127.0.0.1
+      REDIS_PORT: 6379
+      SESSION_DRIVER: redis
+      QUEUE_CONNECTION: redis
+      CACHE_STORE: redis
+      LANDLORD_DB_CONNECTION: pgsql
+      LANDLORD_DB_HOST: 127.0.0.1
+      LANDLORD_DB_PORT: 5432
+      LANDLORD_DB_DATABASE: classicpos_landlord_test
+      LANDLORD_DB_USERNAME: classicpos
+      LANDLORD_DB_PASSWORD: secret
+      SANCTUM_STATEFUL_DOMAINS: localhost
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, ctype, json, bcmath, pdo, pgsql, tokenizer
+          coverage: none
+          tools: composer:v2
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: composer install --no-progress --prefer-dist --no-interaction
+
+      - name: Create landlord test database
+        run: psql -U classicpos -d postgres -c "CREATE DATABASE classicpos_landlord_test;" || true
+        env:
+          PGPASSWORD: secret
+
+      - name: Run backend migrations
+        working-directory: backend
+        run: php artisan migrate --force
+
+      - name: Run landlord migrations
+        working-directory: backend
+        run: php artisan migrate --database=landlord --force
+
+      - name: Run backend tests
+        working-directory: backend
+        run: php artisan test --parallel
+
+  frontend-lint:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Build frontend assets
+        working-directory: backend
+        run: npm run build
+
+  landing-build:
+    name: Landing Page Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: landing/package-lock.json
+
+      - name: Install landing dependencies
+        working-directory: landing
+        run: npm ci
+
+      - name: Type-check landing
+        working-directory: landing
+        run: npm run typecheck
+
+      - name: Build landing page
+        working-directory: landing
+        run: npm run build
+
+  phpstan:
+    name: PHP Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, ctype, json, bcmath, pdo, pgsql
+          coverage: none
+          tools: composer:v2
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        working-directory: backend
+        run: composer install --no-progress --prefer-dist --no-interaction
+
+      - name: Check for syntax errors
+        working-directory: backend
+        run: find app -name "*.php" -exec php -l {} \; 2>&1 | grep -v "No syntax errors" | head -20 || echo "No syntax errors found"

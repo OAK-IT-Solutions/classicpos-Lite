@@ -1,0 +1,98 @@
+name: Build ClassicPOS Desktop
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'desktop-v*'
+
+env:
+  TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+  TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+
+jobs:
+  build:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'windows-latest'
+            args: '--target x86_64-pc-windows-msvc'
+          - platform: 'macos-latest'
+            args: '--target aarch64-apple-darwin'
+          - platform: 'macos-latest'
+            args: '--target x86_64-apple-darwin'
+          - platform: 'ubuntu-22.04'
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+    defaults:
+      run:
+        working-directory: desktop
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Linux dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './desktop/src-tauri -> target'
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build static PHP binary (Docker)
+        run: |
+          docker build -t classicpos-php-builder -f Dockerfile.php .
+          docker create --name php-extract classicpos-php-builder
+          if [[ "${{ matrix.platform }}" == "windows-latest" ]]; then
+            docker cp php-extract:/php src-tauri/binaries/php-x86_64-pc-windows-msvc.exe
+          elif [[ "${{ matrix.platform }}" == "ubuntu-22.04" ]]; then
+            docker cp php-extract:/php src-tauri/binaries/php-x86_64-unknown-linux-gnu
+          elif [[ "${{ matrix.args }}" == *"aarch64"* ]]; then
+            docker cp php-extract:/php src-tauri/binaries/php-aarch64-apple-darwin
+          else
+            docker cp php-extract:/php src-tauri/binaries/php-x86_64-apple-darwin
+          fi
+          docker rm php-extract
+
+      - uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: desktop-v__VERSION__
+          releaseName: 'ClassicPOS Desktop v__VERSION__'
+          releaseBody: |
+            ## ClassicPOS Desktop v__VERSION__
+            
+            ### Download
+            - **Windows**: ClassicPOS-Setup.exe (NSIS installer)
+            - **macOS**: ClassicPOS.dmg
+            - **Linux**: ClassicPOS.AppImage
+            
+            ### System Requirements
+            - Windows 10+ / macOS 12+ / Ubuntu 20.04+
+            - 4GB RAM, 200MB disk space
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}

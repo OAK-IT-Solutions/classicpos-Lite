@@ -1,0 +1,61 @@
+name: Feature Request
+description: Suggest an idea for ClassicPOS
+title: "[FEATURE] "
+labels: ["feature-request", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to suggest a feature! Please use 👍 reactions on the most relevant existing issues rather than creating duplicates.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Is your feature request related to a problem?
+      description: A clear and concise description of what the problem is.
+      placeholder: I'm always frustrated when...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Describe the solution you'd like
+      description: A clear and concise description of what you want to happen.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Describe alternatives you've considered
+      description: Any alternative solutions or features you've considered.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which area of ClassicPOS does this affect?
+      options:
+        - POS Terminal
+        - Inventory Management
+        - Sales & Payments
+        - Reporting & Analytics
+        - Admin Panel
+        - Self-Hosting / Deployment
+        - API / Integrations
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Nice to have
+        - Important
+        - Critical
+    validations:
+      required: true
