@@ -14,36 +14,13 @@ jobs:
   build:
     permissions:
       contents: write
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - platform: 'windows-latest'
-            args: '--target x86_64-pc-windows-msvc'
-            php-binary: 'php-x86_64-pc-windows-msvc.exe'
-          - platform: 'macos-latest'
-            args: '--target aarch64-apple-darwin'
-            php-binary: 'php-aarch64-apple-darwin'
-          - platform: 'macos-latest'
-            args: '--target x86_64-apple-darwin'
-            php-binary: 'php-x86_64-apple-darwin'
-          - platform: 'ubuntu-22.04'
-            args: ''
-            php-binary: 'php-x86_64-unknown-linux-gnu'
-
-    runs-on: ${{ matrix.platform }}
+    runs-on: windows-latest
     defaults:
       run:
         working-directory: desktop
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install Linux dependencies
-        if: matrix.platform == 'ubuntu-22.04'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libssl-dev
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -55,7 +32,7 @@ jobs:
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+          targets: x86_64-pc-windows-msvc
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
@@ -65,18 +42,14 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Make PHP binary executable
-        if: matrix.platform != 'windows-latest'
-        run: chmod +x src-tauri/binaries/${{ matrix.php-binary }}
-
       - name: Check PHP binary exists
         run: |
-          if [ ! -f "src-tauri/binaries/${{ matrix.php-binary }}" ]; then
-            echo "ERROR: PHP binary not found at src-tauri/binaries/${{ matrix.php-binary }}"
-            echo "Build static PHP locally first: docker build -t classicpos-php-builder -f Dockerfile.php ."
+          if (!(Test-Path "src-tauri\binaries\php-x86_64-pc-windows-msvc.exe")) {
+            Write-Error "PHP binary not found"
             exit 1
-          fi
-          echo "PHP binary found: $(du -h src-tauri/binaries/${{ matrix.php-binary }} | cut -f1)"
+          }
+          $size = (Get-Item "src-tauri\binaries\php-x86_64-pc-windows-msvc.exe").Length / 1MB
+          Write-Host "PHP binary found: $([math]::Round($size,1)) MB"
 
       - uses: tauri-apps/tauri-action@v1
         env:
@@ -89,12 +62,12 @@ jobs:
             
             ### Download
             - **Windows**: ClassicPOS-Setup.exe (NSIS installer)
-            - **macOS**: ClassicPOS.dmg
-            - **Linux**: ClassicPOS.AppImage
             
             ### System Requirements
-            - Windows 10+ / macOS 12+ / Ubuntu 20.04+
+            - Windows 10+ 
             - 4GB RAM, 200MB disk space
+            
+            ### Note
+            macOS and Linux builds coming soon.
           releaseDraft: true
           prerelease: false
-          args: ${{ matrix.args }}
