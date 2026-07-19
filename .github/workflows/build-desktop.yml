@@ -18,6 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_sqlite, sqlite3, mbstring, openssl, curl, xml, zip, bcmath, gd
+          tools: composer:v2
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -37,10 +44,14 @@ jobs:
         with:
           workspaces: './desktop/src-tauri -> target'
 
-      - name: Install desktop dependencies
+      - name: Install backend PHP dependencies
+        working-directory: backend
+        run: composer install --no-dev --no-interaction --prefer-dist
+
+      - name: Install desktop Node dependencies
         run: npm ci
 
-      - name: Install backend dependencies
+      - name: Install backend Node dependencies
         working-directory: backend
         run: npm ci
 
