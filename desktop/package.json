@@ -26,7 +26,12 @@
     "dexie": "^4.4.4",
     "dayjs": "^1.11.21",
     "date-fns": "^4.4.0",
-    "lucide-vue-next": "^0.400.0"
+    "lucide-vue-next": "^0.400.0",
+    "jsbarcode": "^3.12.3",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
+    "xlsx": "^0.18.5",
+    "workbox-window": "^7.4.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.0.0",
