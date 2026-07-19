@@ -6,15 +6,18 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      // Shim @inertiajs/vue3 to our desktop adapter
       '@inertiajs/vue3': resolve(__dirname, 'src/shims/inertia.ts'),
-      // Keep the @ alias working for shared composables from the backend
       '@': resolve(__dirname, '../backend/resources/js'),
-      // Override the backend's AppLayout with our pass-through shim
-      // This prevents double-layout when pages wrap content in <AppLayout>
       [resolve(__dirname, '../backend/resources/js/Layouts/AppLayout.vue').replace(/\\/g, '/')]:
         resolve(__dirname, 'src/shims/AppLayout.vue'),
     },
+    // Allow vite to resolve imports from desktop's node_modules
+    // even when the import originates from backend/ files
+    modules: [
+      resolve(__dirname, 'node_modules'),
+      resolve(__dirname, '../backend/node_modules'),
+      'node_modules',
+    ],
   },
   clearScreen: false,
   server: {
@@ -26,9 +29,5 @@ export default defineConfig({
     target: process.env.TAURI_ENV_PLATFORM === 'windows' ? 'chrome105' : 'safari13',
     minify: !process.env.TAURI_ENV_DEBUG ? 'esbuild' : false,
     sourcemap: !!process.env.TAURI_ENV_DEBUG,
-    rollupOptions: {
-      // Alias the backend AppLayout to our shim
-      plugins: [],
-    },
   },
 });
