@@ -6,10 +6,6 @@ on:
     tags:
       - 'desktop-v*'
 
-env:
-  TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-  TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
-
 jobs:
   build:
     permissions:
@@ -43,38 +39,15 @@ jobs:
         run: npm ci
 
       - name: Add node_modules to PATH
-        run: echo "${{ github.workspace }}\desktop\node_modules\.bin" >> $env:GITHUB_PATH
+        shell: bash
+        run: echo "$GITHUB_WORKSPACE/desktop/node_modules/.bin" >> $GITHUB_PATH
 
-      - name: Debug: Check files exist
-        run: |
-          Write-Host "CWD: $(Get-Location)"
-          Write-Host "Files in desktop:"
-          Get-ChildItem -Name
-          Write-Host "index.html exists: $(Test-Path index.html)"
+      - name: Check PHP binary
+        shell: bash
+        run: ls -la src-tauri/binaries/
 
-      - name: Check PHP binary exists
-        run: |
-          if (!(Test-Path "src-tauri\binaries\php-x86_64-pc-windows-msvc.exe")) {
-            Write-Error "PHP binary not found"
-            exit 1
-          }
-          $size = (Get-Item "src-tauri\binaries\php-x86_64-pc-windows-msvc.exe").Length / 1MB
-          Write-Host "PHP binary found: $([math]::Round($size,1)) MB"
-
-      - uses: tauri-apps/tauri-action@v1
+      - name: Build with Tauri
+        shell: bash
+        run: npx tauri build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tagName: desktop-v__VERSION__
-          releaseName: 'ClassicPOS Desktop v__VERSION__'
-          releaseBody: |
-            ## ClassicPOS Desktop v__VERSION__
-            
-            ### Download
-            - **Windows**: ClassicPOS-Setup.exe (NSIS installer)
-            
-            ### System Requirements
-            - Windows 10+ 
-            - 4GB RAM, 200MB disk space
-          releaseDraft: true
-          prerelease: false
