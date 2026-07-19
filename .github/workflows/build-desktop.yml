@@ -45,6 +45,13 @@ jobs:
       - name: Add node_modules to PATH
         run: echo "${{ github.workspace }}\desktop\node_modules\.bin" >> $env:GITHUB_PATH
 
+      - name: Debug: Check files exist
+        run: |
+          Write-Host "CWD: $(Get-Location)"
+          Write-Host "Files in desktop:"
+          Get-ChildItem -Name
+          Write-Host "index.html exists: $(Test-Path index.html)"
+
       - name: Check PHP binary exists
         run: |
           if (!(Test-Path "src-tauri\binaries\php-x86_64-pc-windows-msvc.exe")) {
