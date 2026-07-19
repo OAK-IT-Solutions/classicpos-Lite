@@ -43,7 +43,6 @@ desktop/node_modules/
 
 # Rust
 desktop/src-tauri/target/
-desktop/src-tauri/binaries/php-*
 
 # Test files
 backend/test_license.php

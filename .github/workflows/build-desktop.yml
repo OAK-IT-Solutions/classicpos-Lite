@@ -20,12 +20,16 @@ jobs:
         include:
           - platform: 'windows-latest'
             args: '--target x86_64-pc-windows-msvc'
+            php-binary: 'php-x86_64-pc-windows-msvc.exe'
           - platform: 'macos-latest'
             args: '--target aarch64-apple-darwin'
+            php-binary: 'php-aarch64-apple-darwin'
           - platform: 'macos-latest'
             args: '--target x86_64-apple-darwin'
+            php-binary: 'php-x86_64-apple-darwin'
           - platform: 'ubuntu-22.04'
             args: ''
+            php-binary: 'php-x86_64-unknown-linux-gnu'
 
     runs-on: ${{ matrix.platform }}
     defaults:
@@ -61,20 +65,18 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Build static PHP binary (Docker)
+      - name: Make PHP binary executable
+        if: matrix.platform != 'windows-latest'
+        run: chmod +x src-tauri/binaries/${{ matrix.php-binary }}
+
+      - name: Check PHP binary exists
         run: |
-          docker build -t classicpos-php-builder -f Dockerfile.php .
-          docker create --name php-extract classicpos-php-builder
-          if [[ "${{ matrix.platform }}" == "windows-latest" ]]; then
-            docker cp php-extract:/php src-tauri/binaries/php-x86_64-pc-windows-msvc.exe
-          elif [[ "${{ matrix.platform }}" == "ubuntu-22.04" ]]; then
-            docker cp php-extract:/php src-tauri/binaries/php-x86_64-unknown-linux-gnu
-          elif [[ "${{ matrix.args }}" == *"aarch64"* ]]; then
-            docker cp php-extract:/php src-tauri/binaries/php-aarch64-apple-darwin
-          else
-            docker cp php-extract:/php src-tauri/binaries/php-x86_64-apple-darwin
+          if [ ! -f "src-tauri/binaries/${{ matrix.php-binary }}" ]; then
+            echo "ERROR: PHP binary not found at src-tauri/binaries/${{ matrix.php-binary }}"
+            echo "Build static PHP locally first: docker build -t classicpos-php-builder -f Dockerfile.php ."
+            exit 1
           fi
-          docker rm php-extract
+          echo "PHP binary found: $(du -h src-tauri/binaries/${{ matrix.php-binary }} | cut -f1)"
 
       - uses: tauri-apps/tauri-action@v1
         env:
