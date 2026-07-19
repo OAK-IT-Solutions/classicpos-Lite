@@ -46,7 +46,13 @@ jobs:
 
       - name: Install backend PHP dependencies
         working-directory: backend
-        run: composer install --no-dev --no-interaction --prefer-dist
+        run: |
+          mkdir -p bootstrap/cache
+          mkdir -p storage/framework/cache
+          mkdir -p storage/framework/sessions
+          mkdir -p storage/framework/views
+          mkdir -p storage/logs
+          composer install --no-dev --no-interaction --prefer-dist --no-scripts
 
       - name: Install desktop Node dependencies
         run: npm ci
