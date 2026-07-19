@@ -42,6 +42,9 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
+      - name: Add node_modules to PATH
+        run: echo "${{ github.workspace }}\desktop\node_modules\.bin" >> $env:GITHUB_PATH
+
       - name: Check PHP binary exists
         run: |
           if (!(Test-Path "src-tauri\binaries\php-x86_64-pc-windows-msvc.exe")) {
@@ -66,8 +69,5 @@ jobs:
             ### System Requirements
             - Windows 10+ 
             - 4GB RAM, 200MB disk space
-            
-            ### Note
-            macOS and Linux builds coming soon.
           releaseDraft: true
           prerelease: false
