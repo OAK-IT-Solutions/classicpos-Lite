@@ -237,25 +237,25 @@ Built a complete offline desktop POS system using **Tauri v2 + Static PHP + Lara
 
 ---
 
-## What's Remaining
+## What's Remaining (Testing Only)
 
-| Task | Priority | Effort |
-|------|----------|--------|
-| Build static PHP binary (Docker, 30-60 min) | High | 1 hour |
-| Generate Tauri signing keys | High | 5 min |
-| Add GitHub secrets (TAURI_SIGNING_PRIVATE_KEY) | High | 5 min |
-| Trigger CI/CD build (push tag) | High | 5 min |
-| Test installer on Windows | High | 1 hour |
-| Test installer on macOS | Medium | 1 hour |
-| Test installer on Linux | Medium | 1 hour |
-| Generate app icons (PNG, ICO, ICNS) | Medium | 30 min |
-| Test full POS workflow offline | High | 2 hours |
-| Test USB printing with real printer | Medium | 1 hour |
-| Test auto-update flow | Medium | 1 hour |
-| Test Cloudflare Tunnel setup | Medium | 1 hour |
-| Publish release (remove draft flag) | High | 1 min |
-| Set up Cloudflare Access policies | Low | 30 min |
-| End-to-end testing across platforms | High | 4 hours |
+| Task | Priority | Effort | Status |
+|------|----------|--------|--------|
+| ~~Build static PHP binary~~ | ~~High~~ | ~~1 hour~~ | ✅ Done (30.8MB) |
+| ~~Generate Tauri signing keys~~ | ~~High~~ | ~~5 min~~ | ✅ Done (auto-generated) |
+| ~~Add GitHub secrets~~ | ~~High~~ | ~~5 min~~ | ✅ Done |
+| ~~Trigger CI/CD build~~ | ~~High~~ | ~~5 min~~ | ✅ Done |
+| ~~Generate app icons~~ | ~~Medium~~ | ~~30 min~~ | ✅ Done (from app icon) |
+| ~~Publish release~~ | ~~High~~ | ~~1 min~~ | ✅ Published |
+| Test installer on Windows | High | 1 hour | ⬜ Pending |
+| Test full POS workflow offline | High | 2 hours | ⬜ Pending |
+| Test USB printing with real printer | Medium | 1 hour | ⬜ Pending |
+| Test auto-update flow | Medium | 1 hour | ⬜ Pending |
+| Test Cloudflare Tunnel setup | Medium | 1 hour | ⬜ Pending |
+| Set up Cloudflare Access policies | Low | 30 min | ⬜ Pending |
+| Build for macOS (cross-compile) | Medium | 2 hours | ⬜ Pending |
+| Build for Linux (cross-compile) | Medium | 2 hours | ⬜ Pending |
+| End-to-end testing across platforms | High | 4 hours | ⬜ Pending |
 
 ---
 
