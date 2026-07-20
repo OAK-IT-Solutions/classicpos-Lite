@@ -46,4 +46,33 @@ jobs:
         run: npx vite build
 
       - name: Build Tauri app
-        run: npx tauri build
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: desktop-v__VERSION__
+          releaseName: 'ClassicPOS Desktop v__VERSION__'
+          releaseBody: |
+            ## ClassicPOS Desktop
+            
+            ### Windows Installers
+            - **NSIS Installer** (.exe) — recommended for most users
+            - **MSI Installer** (.msi) — for enterprise deployment
+            
+            ### System Requirements
+            - Windows 10+ (x64)
+            - 4GB RAM
+            - 200MB disk space
+            
+            ### What's Included
+            - Tauri v2 native shell
+            - Static PHP binary (embedded)
+            - Laravel 12 backend
+            - SQLite database (zero config)
+            - USB/Serial receipt printing
+            - Cash drawer control
+            - Auto-updater
+            - License system
+            - Cloudflare Tunnel support
+          releaseDraft: true
+          prerelease: false
