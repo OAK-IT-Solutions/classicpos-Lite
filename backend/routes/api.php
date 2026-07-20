@@ -279,6 +279,10 @@ Route::prefix('v1')->group(function () {
             Route::put('/subscriptions', [SubscriptionController::class, 'update']);
             Route::post('/subscriptions/cancel', [SubscriptionController::class, 'cancel'])
                 ->middleware('permission:manage_subscription');
+
+            // Desktop License management (admin only)
+            Route::get('/desktop-licenses', [\App\Http\Controllers\Api\V1\DesktopLicensePurchaseController::class, 'adminIndex']);
+            Route::get('/desktop-licenses/stats', [\App\Http\Controllers\Api\V1\DesktopLicensePurchaseController::class, 'adminStats']);
         });
 
         // Billing & Subscriptions

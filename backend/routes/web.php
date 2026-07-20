@@ -66,6 +66,9 @@ Route::get('/settings/printer', fn () => Inertia::render('Settings/Printer'))->n
 Route::get('/settings/subscription', fn () => Inertia::render('Settings/Subscription'))->name('settings.subscription');
 Route::get('/settings/downloads', fn () => Inertia::render('Settings/Downloads'))->name('settings.downloads');
 Route::get('/settings/license', fn () => Inertia::render('Settings/DesktopLicense'))->name('settings.desktop-license');
+
+// Admin desktop license management
+Route::get('/admin/desktop-licenses', fn () => Inertia::render('Admin/DesktopLicenses/Index'))->name('admin.desktop-licenses');
 Route::get('/settings/warehouses', fn () => Inertia::render('Settings/Warehouses'))->name('settings.warehouses');
 
 Route::get('/cash-register', fn () => Inertia::render('CashRegister/Index'))->name('cash-register.page');

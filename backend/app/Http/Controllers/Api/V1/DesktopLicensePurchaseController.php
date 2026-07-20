@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Models\Landlord\PaymentTransaction;
+use App\Models\DesktopLicense;
 use App\Services\LicenseService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -11,16 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
-/**
- * Desktop License Controller — handles license purchase, generation, and delivery.
- *
- * Flow:
- * 1. User purchases license via Pesapal/PayPal
- * 2. Payment webhook confirms payment
- * 3. License key is generated and stored
- * 4. License key is emailed to user
- * 5. User enters key in desktop app activation wizard
- */
 class DesktopLicensePurchaseController extends Controller
 {
     /**
@@ -31,33 +21,32 @@ class DesktopLicensePurchaseController extends Controller
     {
         $request->validate([
             'business_name' => 'required|string|max:255',
-            'email' => 'required|email',
+            'email' => 'required|email|max:255',
             'plan' => 'required|in:professional,enterprise',
             'payment_method' => 'required|in:pesapal,paypal',
         ]);
 
-        $plan = $request->plan;
-        $amount = $plan === 'professional' ? 29.00 : 79.00;
+        $amount = $request->plan === 'professional' ? 150.00 : 150.00;
 
-        // Create pending payment
-        $payment = PaymentTransaction::create([
+        // Create pending license
+        $license = DesktopLicense::create([
             'id' => (string) Str::uuid(),
-            'tenant_id' => null, // Desktop license, not tied to tenant
-            'type' => 'license_purchase',
+            'business_name' => $request->business_name,
+            'email' => $request->email,
+            'license_key' => strtoupper('CPPOS-' . strtoupper(substr(bin2hex(random_bytes(10)), 0, 16))),
+            'plan' => $request->plan,
             'amount' => $amount,
             'currency' => 'USD',
-            'gateway' => $request->payment_method,
-            'status' => 'pending',
+            'payment_method' => $request->payment_method,
+            'status' => DesktopLicense::STATUS_PENDING,
             'metadata' => json_encode([
-                'business_name' => $request->business_name,
-                'email' => $request->email,
-                'plan' => $plan,
-                'product' => 'classicpos_desktop',
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
             ]),
         ]);
 
         return response()->json([
-            'payment_id' => $payment->id,
+            'license_id' => $license->id,
             'amount' => $amount,
             'currency' => 'USD',
             'payment_method' => $request->payment_method,
@@ -68,110 +57,181 @@ class DesktopLicensePurchaseController extends Controller
 
     /**
      * POST /api/v1/desktop/license/complete
-     * Complete a license purchase after payment confirmation.
-     * Called by payment webhook or frontend after successful payment.
+     * Complete a license purchase after payment.
      */
     public function complete(Request $request): JsonResponse
     {
         $request->validate([
-            'payment_id' => 'required|string',
+            'license_id' => 'required|string',
             'transaction_id' => 'nullable|string',
         ]);
 
-        $payment = PaymentTransaction::findOrFail($request->payment_id);
+        $license = DesktopLicense::findOrFail($request->license_id);
 
-        if ($payment->status === 'success') {
+        if ($license->status === DesktopLicense::STATUS_ACTIVE) {
             return response()->json([
-                'message' => 'License already generated',
-                'license_key' => $payment->metadata['license_key'] ?? null,
+                'message' => 'License already active',
+                'license_key' => $license->license_key,
             ]);
         }
 
-        // Mark payment as success
-        $payment->update([
-            'status' => 'success',
-            'gateway_ref' => $request->transaction_id,
-            'paid_at' => now(),
+        // Mark as active
+        $license->update([
+            'status' => DesktopLicense::STATUS_ACTIVE,
+            'payment_reference' => $request->transaction_id ?? 'manual_' . uniqid(),
+            'activated_at' => now(),
+            'expires_at' => match ($license->plan) {
+                DesktopLicense::PLAN_ENTERPRISE => null,
+                default => now()->addYear(),
+            },
         ]);
 
-        $metadata = json_decode($payment->metadata, true);
-
-        // Generate license key
-        $expiryDate = match ($metadata['plan'] ?? 'professional') {
-            'professional' => now()->addYear()->toIso8601String(),
-            'enterprise' => null, // No expiry for enterprise
-            default => now()->addYear()->toIso8601String(),
-        };
-
-        $features = match ($metadata['plan'] ?? 'professional') {
-            'professional' => ['full_pos', 'reports', 'multi_branch'],
-            'enterprise' => ['full_pos', 'reports', 'multi_branch', 'custom_integrations', 'priority_support'],
-            default => ['full_pos'],
-        };
+        // Generate the actual license key using LicenseService
+        $features = $license->getFeatures();
+        $expiryDate = $license->expires_at ? $license->expires_at->toIso8601String() : null;
 
         $licenseKey = LicenseService::generate(
-            businessName: $metadata['business_name'] ?? 'Unknown',
+            businessName: $license->business_name,
             deviceId: '*',
             expiryDate: $expiryDate,
             features: $features,
         );
 
-        // Store license key in payment metadata
-        $payment->update([
-            'metadata' => json_encode(array_merge($metadata, [
-                'license_key' => $licenseKey,
-                'generated_at' => now()->toIso8601String(),
-            ])),
-        ]);
+        // Update with the real license key
+        $license->update(['license_key' => $licenseKey]);
 
-        // Send license key via email
+        // Send email
         try {
-            Mail::to($metadata['email'])->send(
+            Mail::to($license->email)->send(
                 new \App\Mail\DesktopLicenseMail(
-                    businessName: $metadata['business_name'] ?? 'Unknown',
+                    businessName: $license->business_name,
                     licenseKey: $licenseKey,
-                    plan: $metadata['plan'] ?? 'professional',
+                    plan: $license->plan,
                     expiresAt: $expiryDate,
                 )
             );
         } catch (\Exception $e) {
-            // Log but don't fail — key is still valid
             \Illuminate\Support\Facades\Log::error('Failed to send license email: ' . $e->getMessage());
         }
 
         return response()->json([
-            'message' => 'License generated successfully',
+            'message' => 'License activated successfully',
             'license_key' => $licenseKey,
-            'plan' => $metadata['plan'] ?? 'professional',
+            'plan' => $license->plan,
             'expires_at' => $expiryDate,
         ]);
     }
 
     /**
      * GET /api/v1/desktop/license/plans
-     * List available license plans.
+     * List desktop license plans.
      */
     public function plans(): JsonResponse
     {
         return response()->json([
             'plans' => [
-                'professional' => [
+                [
+                    'id' => 'professional',
                     'name' => 'Professional',
-                    'price' => 29.00,
+                    'price' => 150.00,
                     'currency' => 'USD',
                     'billing' => 'one-time',
-                    'features' => ['full_pos', 'reports', 'multi_branch'],
-                    'description' => 'Full POS system with offline mode, reporting, and multi-branch support.',
+                    'features' => [
+                        'Full offline POS system',
+                        'USB & serial receipt printing',
+                        'Cash drawer control',
+                        'Sales & inventory reports',
+                        'Multi-branch (up to 5 locations)',
+                        'Barcode scanning',
+                        'Auto-updates (1 year)',
+                        'Cloudflare Tunnel remote access',
+                    ],
+                    'best_for' => 'Small retail shops, bars, and restaurants with 1-5 locations that need reliable offline POS.',
+                    'updates' => '1 year included',
+                    'cta' => 'Buy Now — $150',
                 ],
-                'enterprise' => [
+                [
+                    'id' => 'enterprise',
                     'name' => 'Enterprise',
-                    'price' => 79.00,
+                    'price' => 150.00,
                     'currency' => 'USD',
                     'billing' => 'one-time',
-                    'features' => ['full_pos', 'reports', 'multi_branch', 'custom_integrations', 'priority_support'],
-                    'description' => 'Everything in Professional plus custom integrations and priority support.',
+                    'features' => [
+                        'Everything in Professional',
+                        'Custom integrations',
+                        'Priority support',
+                        'SLA guarantee',
+                        'Lifetime updates',
+                        'Unlimited branches',
+                        'Unlimited devices',
+                    ],
+                    'best_for' => 'Enterprise chains and multi-location operations needing custom integrations and priority support.',
+                    'updates' => 'Lifetime',
+                    'cta' => 'Buy Now — $150',
                 ],
             ],
+        ]);
+    }
+
+    /**
+     * GET /api/v1/admin/desktop-licenses
+     * Admin: List all desktop licenses.
+     */
+    public function adminIndex(Request $request): JsonResponse
+    {
+        $query = DesktopLicense::query();
+
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('business_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('license_key', 'like', "%{$search}%");
+            });
+        }
+
+        $licenses = $query->orderByDesc('created_at')->paginate(20);
+
+        return response()->json([
+            'data' => $licenses->items(),
+            'current_page' => $licenses->currentPage(),
+            'last_page' => $licenses->lastPage(),
+            'total' => $licenses->total(),
+        ]);
+    }
+
+    /**
+     * GET /api/v1/admin/desktop-licenses/stats
+     * Admin: Revenue stats for desktop licenses.
+     */
+    public function adminStats(): JsonResponse
+    {
+        $totalRevenue = DesktopLicense::where('status', '!=', 'voided')->sum('amount');
+        $totalLicenses = DesktopLicense::count();
+        $activeLicenses = DesktopLicense::where('status', 'active')->count();
+        $pendingLicenses = DesktopLicense::where('status', 'pending')->count();
+
+        $byPlan = DesktopLicense::select('plan', DB::raw('COUNT(*) as count'), DB::raw('SUM(amount) as revenue'))
+            ->where('status', '!=', 'voided')
+            ->groupBy('plan')
+            ->get();
+
+        $recentSales = DesktopLicense::where('status', 'active')
+            ->orderByDesc('activated_at')
+            ->limit(5)
+            ->get(['business_name', 'email', 'plan', 'amount', 'activated_at']);
+
+        return response()->json([
+            'total_revenue' => (float) $totalRevenue,
+            'total_licenses' => $totalLicenses,
+            'active_licenses' => $activeLicenses,
+            'pending_licenses' => $pendingLicenses,
+            'by_plan' => $byPlan,
+            'recent_sales' => $recentSales,
         ]);
     }
 }

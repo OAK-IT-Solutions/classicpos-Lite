@@ -31,6 +31,43 @@ Tauri v2 Shell (Rust, ~5MB)
 - **Barcode scanning** via USB
 - **Full inventory, customers, sales, reporting**
 
+## Pricing
+
+**One-time purchase — $150. No monthly fees.**
+
+| Plan | Price | Updates | Best For |
+|------|-------|---------|----------|
+| **Professional** | $150 | 1 year | Small retail shops, bars, restaurants (1-5 locations) |
+| **Enterprise** | $150 | Lifetime | Enterprise chains, multi-location operations |
+
+### What's Included
+
+**Professional ($150)**
+- Full offline POS system
+- USB & serial receipt printing
+- Cash drawer control
+- Sales & inventory reports
+- Multi-branch (up to 5 locations)
+- Barcode scanning
+- Auto-updates (1 year)
+- Cloudflare Tunnel remote access
+
+**Enterprise ($150)**
+- Everything in Professional
+- Custom integrations
+- Priority support
+- SLA guarantee
+- Lifetime updates
+- Unlimited branches
+- Unlimited devices
+
+### How to Purchase
+
+1. Visit [ClassicPOS License Portal](https://oakitsolutionsandsupplies.com/settings/license)
+2. Choose Professional or Enterprise ($150 one-time)
+3. Pay via PayPal or PesaPal
+4. Receive license key via email instantly
+
 ## Download
 
 Go to [Releases](https://github.com/OAK-IT-Solutions/classicpos-Lite/releases) to download the latest version.
