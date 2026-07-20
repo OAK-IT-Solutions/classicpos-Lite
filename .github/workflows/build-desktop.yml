@@ -18,59 +18,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.4'
-          extensions: pdo_sqlite, sqlite3, mbstring, openssl, curl, xml, zip, bcmath, gd, fileinfo, dom, tokenizer
-          tools: composer:v2
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: 'npm'
-          cache-dependency-path: |
-            desktop/package-lock.json
-            backend/package-lock.json
+          cache-dependency-path: desktop/package-lock.json
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-pc-windows-msvc
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './desktop/src-tauri -> target'
 
-      - name: Install backend PHP dependencies
-        working-directory: backend
-        run: |
-          mkdir -p bootstrap/cache
-          mkdir -p storage/framework/cache
-          mkdir -p storage/framework/sessions
-          mkdir -p storage/framework/views
-          mkdir -p storage/logs
-          composer install --no-dev --no-interaction --prefer-dist --no-scripts
-
-      - name: Install desktop Node dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: Install backend Node dependencies
-        working-directory: backend
-        run: npm ci
+      - name: Build frontend
+        run: npx vite build
 
-      - name: Add node_modules to PATH
-        shell: bash
-        run: echo "$GITHUB_WORKSPACE/desktop/node_modules/.bin" >> $GITHUB_PATH
-
-      - name: Check PHP binary
-        shell: bash
-        run: ls -la src-tauri/binaries/
-
-      - name: Build with Tauri
-        shell: bash
+      - name: Build Tauri app
         run: npx tauri build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
