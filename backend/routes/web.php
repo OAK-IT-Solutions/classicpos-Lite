@@ -65,6 +65,7 @@ Route::get('/settings/devices', fn () => Inertia::render('Settings/Devices'))->n
 Route::get('/settings/printer', fn () => Inertia::render('Settings/Printer'))->name('settings.printer');
 Route::get('/settings/subscription', fn () => Inertia::render('Settings/Subscription'))->name('settings.subscription');
 Route::get('/settings/downloads', fn () => Inertia::render('Settings/Downloads'))->name('settings.downloads');
+Route::get('/settings/license', fn () => Inertia::render('Settings/DesktopLicense'))->name('settings.desktop-license');
 Route::get('/settings/warehouses', fn () => Inertia::render('Settings/Warehouses'))->name('settings.warehouses');
 
 Route::get('/cash-register', fn () => Inertia::render('CashRegister/Index'))->name('cash-register.page');

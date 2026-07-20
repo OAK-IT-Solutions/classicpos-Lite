@@ -79,6 +79,10 @@ Route::prefix('v1')->group(function () {
         Route::get('/license/status', [\App\Http\Controllers\Api\V1\DesktopLicenseController::class, 'status']);
         Route::post('/license/deactivate', [\App\Http\Controllers\Api\V1\DesktopLicenseController::class, 'deactivate']);
         Route::get('/license/generate-demo', [\App\Http\Controllers\Api\V1\DesktopLicenseController::class, 'generateDemo']);
+        // License purchase
+        Route::post('/license/purchase', [\App\Http\Controllers\Api\V1\DesktopLicensePurchaseController::class, 'purchase']);
+        Route::post('/license/complete', [\App\Http\Controllers\Api\V1\DesktopLicensePurchaseController::class, 'complete']);
+        Route::get('/license/plans', [\App\Http\Controllers\Api\V1\DesktopLicensePurchaseController::class, 'plans']);
         // Update server for Tauri Updater
         Route::get('/updater/{target}/{arch}/{current_version}', [\App\Http\Controllers\Api\V1\DesktopUpdateController::class, 'check']);
     });

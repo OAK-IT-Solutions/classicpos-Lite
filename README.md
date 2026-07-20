@@ -46,10 +46,28 @@ Go to [Releases](https://github.com/OAK-IT-Solutions/classicpos-Lite/releases) t
 
 ## Quick Start
 
-1. Download the installer from [Releases](https://github.com/OAK-IT-Solutions/classicpos-Lite/releases)
-2. Run the installer
-3. Enter your license key on first launch
-4. Start selling!
+### 1. Get a License
+Visit [ClassicPOS License Portal](https://oakitsolutionsandsupplies.com/settings/license) to purchase a license key.
+
+| Plan | Price | Features |
+|------|-------|----------|
+| Professional | $29 (one-time) | Full POS, offline mode, printing, reports, multi-branch |
+| Enterprise | $79 (one-time) | Everything + custom integrations, priority support |
+
+### 2. Download & Install
+Download the installer from [Releases](https://github.com/OAK-IT-Solutions/classicpos-Lite/releases) and run it.
+
+### 3. Activate
+- Launch ClassicPOS Desktop
+- Enter your **business name** and **license key** (from your email)
+- Click **Activate**
+- Start selling!
+
+### License Key Format
+```
+CPPOS-XXXX-XXXX-XXXX-XXXX
+```
+You'll receive this key via email after purchase. Keep it safe — you'll need it if you reinstall.
 
 ## Development
 
