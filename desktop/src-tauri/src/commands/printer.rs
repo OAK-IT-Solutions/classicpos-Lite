@@ -142,11 +142,7 @@ pub fn list_usb_printers() -> Vec<PrinterInfo> {
         for device in devices.iter() {
             if let Ok(desc) = device.device_descriptor() {
                 if desc.class_code() == 0x07 {
-                    let name = device
-                        .open()
-                        .ok()
-                        .and_then(|h| h.read_product_string_ascii().ok())
-                        .unwrap_or_else(|| format!("USB Printer {:04x}:{:04x}", desc.vendor_id(), desc.product_id()));
+                    let name = format!("USB Printer {:04x}:{:04x}", desc.vendor_id(), desc.product_id());
 
                     printers.push(PrinterInfo {
                         name,
@@ -173,8 +169,8 @@ pub fn list_serial_printers() -> Vec<PrinterInfo> {
             printers.push(PrinterInfo {
                 name: port_info.port_name.clone(),
                 port_type: "serial".to_string(),
-                vendor_id: port_info.vid_pid.map(|v| v.0),
-                product_id: port_info.vid_pid.map(|v| v.1),
+                vendor_id: None,
+                product_id: None,
                 port_name: Some(port_info.port_name),
                 connected: true,
             });
