@@ -23,7 +23,9 @@ jobs:
         with:
           node-version: lts/*
           cache: 'npm'
-          cache-dependency-path: desktop/package-lock.json
+          cache-dependency-path: |
+            desktop/package-lock.json
+            backend/package-lock.json
 
       - name: Install Rust stable
         uses: dtolnay/rust-toolchain@stable
@@ -33,7 +35,11 @@ jobs:
         with:
           workspaces: './desktop/src-tauri -> target'
 
-      - name: Install dependencies
+      - name: Install desktop dependencies
+        run: npm ci
+
+      - name: Install backend dependencies
+        working-directory: backend
         run: npm ci
 
       - name: Build frontend
