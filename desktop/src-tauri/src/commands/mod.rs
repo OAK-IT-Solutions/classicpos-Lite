@@ -286,6 +286,21 @@ fn find_php_binary(app: &AppHandle) -> Result<String, String> {
         return Ok(path);
     }
 
+    // Try exe directory (production — binary next to exe)
+    if let Ok(exe_path) = std::env::current_exe() {
+        if let Some(exe_dir) = exe_path.parent() {
+            let path = exe_dir.join("binaries").join(binary_name);
+            if path.exists() {
+                return Ok(path.to_string_lossy().to_string());
+            }
+            // Also try same directory as exe
+            let path2 = exe_dir.join(binary_name);
+            if path2.exists() {
+                return Ok(path2.to_string_lossy().to_string());
+            }
+        }
+    }
+
     let dev_dirs = [
         std::env::current_dir().unwrap_or_default().join("src-tauri").join("binaries"),
         PathBuf::from(std::env::var("USERPROFILE").or_else(|_| std::env::var("HOME")).unwrap_or_default())
