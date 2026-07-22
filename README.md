@@ -88,8 +88,8 @@ Visit [ClassicPOS License Portal](https://oakitsolutionsandsupplies.com/settings
 
 | Plan | Price | Features |
 |------|-------|----------|
-| Professional | $29 (one-time) | Full POS, offline mode, printing, reports, multi-branch |
-| Enterprise | $79 (one-time) | Everything + custom integrations, priority support |
+| Professional | $150 (one-time) | Full POS, offline mode, printing, reports, multi-branch |
+| Enterprise | $150 (one-time) | Everything + custom integrations, priority support, lifetime updates |
 
 ### 2. Download & Install
 Download the installer from [Releases](https://github.com/OAK-IT-Solutions/classicpos-Lite/releases) and run it.

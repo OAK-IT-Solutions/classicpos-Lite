@@ -1,4 +1,7 @@
 # ClassicPOS Static PHP Builder
+# WARNING: This produces a LINUX binary (ELF format).
+# For Windows builds, use spc.exe locally: see build-php-windows.bat
+# For macOS builds, use spc on macOS or cross-compile in CI
 
 FROM ubuntu:24.04 AS builder
 

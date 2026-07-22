@@ -16,7 +16,6 @@ extensions:
   - filter
   - iconv
   - mbstring
-  - pcntl
   - session
   - tokenizer
   # Encryption & Security

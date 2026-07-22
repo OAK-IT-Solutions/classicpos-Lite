@@ -11,7 +11,7 @@
         <div class="plan-card" :class="{ selected: selectedPlan === 'professional' }" @click="selectedPlan = 'professional'">
           <div class="plan-badge">Most Popular</div>
           <h3>Professional</h3>
-          <div class="price">$29</div>
+          <div class="price">$150</div>
           <div class="billing">One-time payment</div>
           <ul>
             <li>Full POS with offline mode</li>
@@ -29,7 +29,7 @@
         <div class="plan-card enterprise" :class="{ selected: selectedPlan === 'enterprise' }" @click="selectedPlan = 'enterprise'">
           <div class="plan-badge badge-enterprise">Best Value</div>
           <h3>Enterprise</h3>
-          <div class="price">$79</div>
+          <div class="price">$150</div>
           <div class="billing">One-time payment</div>
           <ul>
             <li>Everything in Professional</li>
@@ -68,7 +68,7 @@
         </div>
 
         <div class="selected-plan-summary">
-          <strong>{{ selectedPlan === 'professional' ? 'Professional' : 'Enterprise' }}</strong> — ${{ selectedPlan === 'professional' ? '29' : '79' }}
+          <strong>{{ selectedPlan === 'professional' ? 'Professional' : 'Enterprise' }}</strong> — $150
         </div>
 
         <div class="button-row">

@@ -36,7 +36,7 @@
             <li><span class="check">&#10003;</span> Cloudflare Tunnel remote access</li>
           </ul>
 
-          <a href="#buy-desktop" class="btn-buy">Buy Now — $150</a>
+          <a href="https://oakitsolutionsandsupplies.com/settings/license" class="btn-buy">Buy Now — $150</a>
           <p class="updates-note">1 year of updates included</p>
         </div>
 
@@ -65,7 +65,7 @@
             <li><span class="check">&#10003;</span> Unlimited devices</li>
           </ul>
 
-          <a href="#buy-desktop" class="btn-buy enterprise">Buy Now — $150</a>
+          <a href="https://oakitsolutionsandsupplies.com/settings/license" class="btn-buy enterprise">Buy Now — $150</a>
           <p class="updates-note">Lifetime updates included</p>
         </div>
       </div>

@@ -35,6 +35,34 @@ jobs:
         with:
           workspaces: './desktop/src-tauri -> target'
 
+      - name: Add Git usr\bin to PATH
+        run: echo "C:\Program Files\Git\usr\bin" >> $GITHUB_PATH
+
+      - name: Download Static PHP CLI (spc)
+        shell: pwsh
+        run: |
+          curl.exe -fsSL -o spc.exe https://dl.static-php.dev/v3/spc-bin/nightly/spc-windows-x64.exe
+          Write-Host "spc.exe downloaded: $((Get-Item spc.exe).Length / 1MB) MB"
+
+      - name: Build Static PHP for Windows
+        shell: cmd
+        run: |
+          spc.exe download --with-php=8.4 --for-extensions="pdo_sqlite,sqlite3,bcmath,ctype,dom,fileinfo,filter,iconv,mbstring,session,tokenizer,openssl,sodium,curl,libxml,simplexml,xml,xmlreader,xmlwriter,zip,zlib,gd,json" --parallel 3
+          spc.exe build "pdo_sqlite,sqlite3,bcmath,ctype,dom,fileinfo,filter,iconv,mbstring,session,tokenizer,openssl,sodium,curl,libxml,simplexml,xml,xmlreader,xmlwriter,zip,zlib,gd,json" --build-cli
+          copy buildroot\bin\php.exe src-tauri\binaries\php-x86_64-pc-windows-msvc.exe
+
+      - name: Verify PHP binary
+        shell: pwsh
+        run: |
+          $bytes = [System.IO.File]::ReadAllBytes("src-tauri/binaries/php-x86_64-pc-windows-msvc.exe")
+          if ($bytes[0] -eq 0x4D -and $bytes[1] -eq 0x5A) {
+            Write-Host "VALID Windows PE binary (MZ header)"
+          } else {
+            Write-Error "NOT A VALID PE BINARY!"
+            exit 1
+          }
+          & "src-tauri/binaries/php-x86_64-pc-windows-msvc.exe" -v
+
       - name: Install desktop dependencies
         run: npm ci
 
@@ -55,6 +83,19 @@ jobs:
           releaseBody: |
             ## ClassicPOS Desktop
             
+            ### Installation
+            1. Download the NSIS installer (.exe) below
+            2. Double-click to install
+            3. Launch ClassicPOS from Start Menu
+            4. Enter your license key to activate
+            
+            For detailed instructions, see INSTALL.md in the repository.
+            
+            ### Purchase License
+            Visit https://oakitsolutionsandsupplies.com/settings/license
+            - Professional: $150 one-time
+            - Enterprise: $150 one-time
+            
             ### Windows Installers
             - **NSIS Installer** (.exe) — recommended for most users
             - **MSI Installer** (.msi) — for enterprise deployment
@@ -66,12 +107,11 @@ jobs:
             
             ### What's Included
             - Tauri v2 native shell
-            - Static PHP binary (embedded)
+            - Static PHP 8.4 binary (embedded, ~28MB)
             - Laravel 12 backend
             - SQLite database (zero config)
             - USB/Serial receipt printing
             - Cash drawer control
-            - Auto-updater
             - License system
             - Cloudflare Tunnel support
           releaseDraft: true
