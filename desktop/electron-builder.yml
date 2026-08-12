@@ -1,0 +1,31 @@
+appId: com.oakitsolutions.classicpos
+productName: ClassicPOS
+directories:
+  output: release
+files:
+  - "!backend-temp"
+  - "!backend"
+  - "!node_modules/.cache"
+win:
+  target:
+    - target: nsis
+  icon: resources/icons/icon.ico
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  installerIcon: resources/icons/icon.ico
+  uninstallerIcon: resources/icons/icon.ico
+extraResources:
+  - from: resources/backend-bundle.tar
+    to: backend-bundle.tar
+  - from: resources/php-router.php
+    to: php-router.php
+  - from: resources/php-startup.php
+    to: php-startup.php
+  - from: resources/binaries
+    to: binaries
+publish:
+  provider: github
+  owner: OAK-IT-Solutions
+  repo: classicpos-Lite
+  releaseType: release

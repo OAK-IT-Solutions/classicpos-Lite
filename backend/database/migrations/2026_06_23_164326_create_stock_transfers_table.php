@@ -1,0 +1,26 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('stock_transfers', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('from_warehouse_id')->constrained('warehouses')->onDelete('restrict');
+            $table->foreignUuid('to_warehouse_id')->constrained('warehouses')->onDelete('restrict');
+            $table->string('status', 20)->default('pending');
+            $table->text('notes')->nullable();
+            $table->timestamp('transferred_at')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('stock_transfers');
+    }
+};

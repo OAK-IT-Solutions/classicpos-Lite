@@ -1,0 +1,3874 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "ClassicPOS API",
+        "description": "ClassicPOS — Point of Sale REST API. Multi-tenant SaaS with role-based access control.",
+        "contact": {
+            "name": "ClassicPOS Support",
+            "email": "support@oakitsolutionsandsupplies.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api/v1",
+            "description": "API v1"
+        }
+    ],
+    "paths": {
+        "/activity-logs": {
+            "get": {
+                "tags": [
+                    "Audit"
+                ],
+                "summary": "List activity logs",
+                "operationId": "45697d6b161f470d06d92a890e6c1086",
+                "responses": {
+                    "200": {
+                        "description": "Paginated activity logs"
+                    }
+                }
+            }
+        },
+        "/agent/auth": {},
+        "/bank-reconciliation": {
+            "get": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "List bank reconciliations",
+                "operationId": "387613eafe332163aef46cf1851c2039",
+                "responses": {
+                    "200": {
+                        "description": "Paginated reconciliations"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Create a bank reconciliation",
+                "operationId": "5ff74b1ef4351e761b92c664d14225eb",
+                "responses": {
+                    "201": {
+                        "description": "Reconciliation created"
+                    }
+                }
+            }
+        },
+        "/billing": {},
+        "/branches": {},
+        "/categories": {
+            "get": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "List all categories",
+                "operationId": "2eb9088f8a869db09d83eaa9c605312f",
+                "responses": {
+                    "200": {
+                        "description": "List of categories"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Create a category",
+                "operationId": "7bdbe2d756cdbeeb0e8332a71bfde4a0",
+                "responses": {
+                    "201": {
+                        "description": "Category created"
+                    }
+                }
+            }
+        },
+        "/chart-of-accounts": {
+            "get": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "List chart of accounts",
+                "operationId": "20b7b4ae7a77e8b9bf31df77dc174256",
+                "responses": {
+                    "200": {
+                        "description": "Paginated accounts"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Create a chart of account",
+                "operationId": "867a8f131dfe1fcd7cb6aa8abf62ab18",
+                "responses": {
+                    "201": {
+                        "description": "Account created"
+                    }
+                }
+            }
+        },
+        "/customers": {},
+        "/devices": {
+            "get": {
+                "tags": [
+                    "Devices"
+                ],
+                "summary": "List all devices",
+                "operationId": "46a0f54e6220465e766db551281ddf64",
+                "responses": {
+                    "200": {
+                        "description": "Device list"
+                    }
+                }
+            }
+        },
+        "/efris": {},
+        "/grn": {
+            "post": {
+                "tags": [
+                    "GRN"
+                ],
+                "summary": "Create a GRN",
+                "operationId": "90808c0ee766cb61a06327e3de613c48",
+                "responses": {
+                    "201": {
+                        "description": "GRN created"
+                    }
+                }
+            }
+        },
+        "/integrations": {
+            "get": {
+                "tags": [
+                    "Integrations"
+                ],
+                "summary": "List connected integrations",
+                "operationId": "789c7519af172d2fe781bf58384b772b",
+                "responses": {
+                    "200": {
+                        "description": "Integration list"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Integrations"
+                ],
+                "summary": "Connect an integration",
+                "operationId": "c7d49a3b36aa96ad47245c8957ca3e81",
+                "responses": {
+                    "201": {
+                        "description": "Integration connected"
+                    }
+                }
+            }
+        },
+        "/inventory-adjustments": {
+            "get": {
+                "tags": [
+                    "Inventory Adjustments"
+                ],
+                "summary": "List inventory adjustments",
+                "operationId": "c29f68566ad434e1dab99ae25a560dc7",
+                "responses": {
+                    "200": {
+                        "description": "Paginated adjustments"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Inventory Adjustments"
+                ],
+                "summary": "Create an inventory adjustment",
+                "operationId": "63cc4e046f0a0c8894e15fb2eca6beb2",
+                "responses": {
+                    "201": {
+                        "description": "Adjustment created"
+                    }
+                }
+            }
+        },
+        "/inventory": {
+            "put": {
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Update inventory stock",
+                "operationId": "629e570984fe312917e4dc1291c4c250",
+                "responses": {
+                    "200": {
+                        "description": "Inventory updated"
+                    }
+                }
+            }
+        },
+        "/journal-entries": {
+            "get": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "List journal entries",
+                "operationId": "ed14d1ec477a145e5f1d708fafda75c0",
+                "responses": {
+                    "200": {
+                        "description": "Paginated journal entries"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Create a journal entry",
+                "operationId": "4b1e4b0fe06650ae84bfe8a2a57bc67a",
+                "responses": {
+                    "201": {
+                        "description": "Journal entry created"
+                    }
+                }
+            }
+        },
+        "/settings/locale": {
+            "get": {
+                "tags": [
+                    "Settings"
+                ],
+                "summary": "Get locale settings",
+                "operationId": "3ec79b6f1dabe60a2af2a4eb3086ed25",
+                "responses": {
+                    "200": {
+                        "description": "Locale settings"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Settings"
+                ],
+                "summary": "Update locale settings",
+                "operationId": "f58e938b4025d7ba0eda859e3483b919",
+                "responses": {
+                    "200": {
+                        "description": "Locale updated"
+                    }
+                }
+            }
+        },
+        "/loyalty": {},
+        "/notifications": {
+            "get": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "List user notifications",
+                "operationId": "a48dc613f9c4d7d3414d6dcf848889c8",
+                "responses": {
+                    "200": {
+                        "description": "Paginated notifications"
+                    }
+                }
+            }
+        },
+        "/onboarding": {},
+        "/operating-accounts": {
+            "get": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "List operating accounts",
+                "operationId": "b799d308cc22c2deb3b92ddd2a61304e",
+                "responses": {
+                    "200": {
+                        "description": "Paginated accounts"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Create an operating account",
+                "operationId": "5088410325797793b702bcd149513891",
+                "responses": {
+                    "201": {
+                        "description": "Account created"
+                    }
+                }
+            }
+        },
+        "/payments": {
+            "get": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "List payments",
+                "operationId": "d42af22098bc46725c8075794e61e560",
+                "responses": {
+                    "200": {
+                        "description": "Paginated payments"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Process a payment",
+                "operationId": "67d4e440305ceaa9249853626e006981",
+                "responses": {
+                    "201": {
+                        "description": "Payment processed"
+                    }
+                }
+            }
+        },
+        "/products": {},
+        "/promotions": {},
+        "/purchase-orders": {
+            "post": {
+                "tags": [
+                    "Purchase Orders"
+                ],
+                "summary": "Create a purchase order",
+                "operationId": "6dc44c32b3476c7c23358234f0bd0a78",
+                "responses": {
+                    "201": {
+                        "description": "Purchase order created"
+                    }
+                }
+            }
+        },
+        "/reports": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Sales summary report",
+                "operationId": "9056287d4cd59f25d860dc3c2d16d00e",
+                "responses": {
+                    "200": {
+                        "description": "Report data"
+                    }
+                }
+            }
+        },
+        "/roles": {
+            "get": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "List all roles",
+                "operationId": "4ef2c55102ba3a98f5bb99843cc8d2d6",
+                "responses": {
+                    "200": {
+                        "description": "Role list"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Create a role",
+                "operationId": "077e50d6d30b4efd40ec6f56162bf841",
+                "responses": {
+                    "201": {
+                        "description": "Role created"
+                    }
+                }
+            }
+        },
+        "/stock-transfers": {
+            "post": {
+                "tags": [
+                    "Stock Transfers"
+                ],
+                "summary": "Create a stock transfer",
+                "operationId": "357846a557449f38ca13b2a26ee14440",
+                "responses": {
+                    "201": {
+                        "description": "Transfer created"
+                    }
+                }
+            }
+        },
+        "/subscriptions": {
+            "get": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "List subscriptions",
+                "operationId": "4e0263830d492a9c5c0a615873461385",
+                "responses": {
+                    "200": {
+                        "description": "Subscription list"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Update subscription plan",
+                "operationId": "fb636a425ce0afd6ffd8b42d95c75695",
+                "responses": {
+                    "200": {
+                        "description": "Subscription updated"
+                    }
+                }
+            }
+        },
+        "/suppliers": {},
+        "/sync": {},
+        "/sync/sales": {
+            "post": {
+                "tags": [
+                    "Sync"
+                ],
+                "summary": "Sync offline sales",
+                "operationId": "585941dfca038d77a34788c04bae0e63",
+                "responses": {
+                    "200": {
+                        "description": "Sync results"
+                    }
+                }
+            }
+        },
+        "/sync/settings": {
+            "get": {
+                "tags": [
+                    "Sync"
+                ],
+                "summary": "Get sync settings",
+                "operationId": "31d1bdcb2641e883e4a881fd70e1032b",
+                "responses": {
+                    "200": {
+                        "description": "Sync settings"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Sync"
+                ],
+                "summary": "Update sync settings",
+                "operationId": "555cf88ec5d66a746bf83e81f7408a76",
+                "responses": {
+                    "200": {
+                        "description": "Updated settings"
+                    }
+                }
+            }
+        },
+        "/tax-profiles": {},
+        "/tickets": {
+            "get": {
+                "tags": [
+                    "Support"
+                ],
+                "summary": "List support tickets",
+                "operationId": "58016360b2a1361c2775ae34d34a84d5",
+                "responses": {
+                    "200": {
+                        "description": "Paginated tickets"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Support"
+                ],
+                "summary": "Create a support ticket",
+                "operationId": "8169964a096efcff7ed542c5011493a0",
+                "responses": {
+                    "201": {
+                        "description": "Ticket created"
+                    }
+                }
+            }
+        },
+        "/warehouses": {},
+        "/activity-logs/export": {
+            "get": {
+                "tags": [
+                    "Audit"
+                ],
+                "summary": "Export activity logs as CSV",
+                "operationId": "31fc39015cec3f52c48b69530bd57834",
+                "responses": {
+                    "200": {
+                        "description": "CSV download"
+                    }
+                }
+            }
+        },
+        "/admin/auth/profile": {
+            "get": {
+                "tags": [
+                    "Admin Auth"
+                ],
+                "summary": "Get admin profile",
+                "operationId": "0679969617c3f03c4f6bbb47d0350e38",
+                "responses": {
+                    "200": {
+                        "description": "Profile returned"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin Auth"
+                ],
+                "summary": "Update admin profile",
+                "operationId": "90fe8579a810e467f0d07671762c8f58",
+                "responses": {
+                    "200": {
+                        "description": "Profile updated"
+                    }
+                }
+            }
+        },
+        "/admin/auth/change-password": {
+            "post": {
+                "tags": [
+                    "Admin Auth"
+                ],
+                "summary": "Change admin password",
+                "operationId": "5d7b2d85d14ac8b8e3bdfa8301a10929",
+                "responses": {
+                    "200": {
+                        "description": "Password changed"
+                    }
+                }
+            }
+        },
+        "/admin/auth/login": {
+            "post": {
+                "tags": [
+                    "Admin Auth"
+                ],
+                "summary": "Admin login",
+                "operationId": "62404c889c06d309b04229ccbaf56b25",
+                "responses": {
+                    "200": {
+                        "description": "Login successful"
+                    }
+                }
+            }
+        },
+        "/admin/auth/me": {
+            "get": {
+                "tags": [
+                    "Admin Auth"
+                ],
+                "summary": "Get current admin user",
+                "operationId": "627608bbc424ddb1a07d9554ce6cb3c8",
+                "responses": {
+                    "200": {
+                        "description": "Current user returned"
+                    }
+                }
+            }
+        },
+        "/admin/auth/logout": {
+            "post": {
+                "tags": [
+                    "Admin Auth"
+                ],
+                "summary": "Admin logout",
+                "operationId": "d367ad36710d17afd0221dfa544c6926",
+                "responses": {
+                    "200": {
+                        "description": "Logged out"
+                    }
+                }
+            }
+        },
+        "/admin/subscriptions": {
+            "get": {
+                "tags": [
+                    "Admin Subscriptions"
+                ],
+                "summary": "List subscriptions",
+                "operationId": "68c79c3f262633ac09244fca16e53516",
+                "responses": {
+                    "200": {
+                        "description": "Subscriptions listed"
+                    }
+                }
+            }
+        },
+        "/admin/subscriptions/{subscription}": {
+            "get": {
+                "tags": [
+                    "Admin Subscriptions"
+                ],
+                "summary": "Get subscription",
+                "operationId": "b3257f56e20add0873f62b5fe9c6e9d7",
+                "responses": {
+                    "200": {
+                        "description": "Subscription returned"
+                    }
+                }
+            }
+        },
+        "/admin/subscriptions/{subscription}/change-plan": {
+            "post": {
+                "tags": [
+                    "Admin Subscriptions"
+                ],
+                "summary": "Change subscription plan",
+                "operationId": "f22f666252cd8ac5fa8eebba3713e804",
+                "responses": {
+                    "200": {
+                        "description": "Plan changed"
+                    }
+                }
+            }
+        },
+        "/admin/subscriptions/{subscription}/cancel": {
+            "post": {
+                "tags": [
+                    "Admin Subscriptions"
+                ],
+                "summary": "Cancel subscription",
+                "operationId": "388b94ea59b3faf0f7800727823ecbb7",
+                "responses": {
+                    "200": {
+                        "description": "Subscription cancelled"
+                    }
+                }
+            }
+        },
+        "/admin/tickets": {
+            "get": {
+                "tags": [
+                    "Admin Tickets"
+                ],
+                "summary": "List support tickets",
+                "operationId": "6e8f5353943380f2e2da7b711cb51623",
+                "responses": {
+                    "200": {
+                        "description": "Tickets listed"
+                    }
+                }
+            }
+        },
+        "/admin/tickets/{ticket}": {
+            "get": {
+                "tags": [
+                    "Admin Tickets"
+                ],
+                "summary": "Get support ticket",
+                "operationId": "b9170456a9de14826bcaf06bdfa4d9ce",
+                "responses": {
+                    "200": {
+                        "description": "Ticket returned"
+                    }
+                }
+            }
+        },
+        "/admin/tickets/{ticket}/assign": {
+            "post": {
+                "tags": [
+                    "Admin Tickets"
+                ],
+                "summary": "Assign ticket",
+                "operationId": "4b7f8bd07b5ced5936a757ef8b8d9dec",
+                "responses": {
+                    "200": {
+                        "description": "Ticket assigned"
+                    }
+                }
+            }
+        },
+        "/admin/tickets/{ticket}/reply": {
+            "post": {
+                "tags": [
+                    "Admin Tickets"
+                ],
+                "summary": "Reply to ticket",
+                "operationId": "07612071b866bd7c3fef6a780565c8f9",
+                "responses": {
+                    "201": {
+                        "description": "Reply sent"
+                    }
+                }
+            }
+        },
+        "/admin/tickets/{ticket}/status": {
+            "post": {
+                "tags": [
+                    "Admin Tickets"
+                ],
+                "summary": "Update ticket status",
+                "operationId": "32cdbb49a620473d876f0f4dc40401e8",
+                "responses": {
+                    "200": {
+                        "description": "Status updated"
+                    }
+                }
+            }
+        },
+        "/admin/tickets/{ticket}/reopen": {
+            "post": {
+                "tags": [
+                    "Admin Tickets"
+                ],
+                "summary": "Reopen ticket",
+                "operationId": "b61ee9ce619bfb9f3fe7bf6894cf5cce",
+                "responses": {
+                    "200": {
+                        "description": "Ticket reopened"
+                    }
+                }
+            }
+        },
+        "/admin/admin-users": {
+            "get": {
+                "tags": [
+                    "Admin Users"
+                ],
+                "summary": "List admin users",
+                "operationId": "ee14dc24ddca77836829f1035ba3a67c",
+                "responses": {
+                    "200": {
+                        "description": "Admin users listed"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin Users"
+                ],
+                "summary": "Create admin user",
+                "operationId": "29be1d742ad17e592542950f01d37043",
+                "responses": {
+                    "201": {
+                        "description": "Admin user created"
+                    }
+                }
+            }
+        },
+        "/admin/admin-users/{admin}": {
+            "put": {
+                "tags": [
+                    "Admin Users"
+                ],
+                "summary": "Update admin user",
+                "operationId": "91bfb44c17fa79c5b8295c92e1f0f677",
+                "responses": {
+                    "200": {
+                        "description": "Admin user updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Users"
+                ],
+                "summary": "Delete admin user",
+                "operationId": "d1d92454d370ebc67f7d8f60cc131451",
+                "responses": {
+                    "200": {
+                        "description": "Admin user deleted"
+                    }
+                }
+            }
+        },
+        "/admin/agents": {
+            "get": {
+                "tags": [
+                    "Admin Agents"
+                ],
+                "summary": "List agents",
+                "operationId": "6546b9c36c53620642b2c7226b2d514c",
+                "responses": {
+                    "200": {
+                        "description": "Agents listed"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin Agents"
+                ],
+                "summary": "Create agent",
+                "operationId": "6cb21535a78d3de5187f0bcd35b52e7c",
+                "responses": {
+                    "201": {
+                        "description": "Agent created"
+                    }
+                }
+            }
+        },
+        "/admin/agents/{agent}": {
+            "get": {
+                "tags": [
+                    "Admin Agents"
+                ],
+                "summary": "Get agent",
+                "operationId": "fcbce89c5e3470472c0d11b553424542",
+                "responses": {
+                    "200": {
+                        "description": "Agent returned"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin Agents"
+                ],
+                "summary": "Update agent",
+                "operationId": "851d1ce7e388cf6a981b43c4107788e0",
+                "responses": {
+                    "200": {
+                        "description": "Agent updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Agents"
+                ],
+                "summary": "Delete agent",
+                "operationId": "c6375003183ebb154dd31517b2ebcc02",
+                "responses": {
+                    "200": {
+                        "description": "Agent deleted"
+                    }
+                }
+            }
+        },
+        "/admin/agents/{agent}/performance": {
+            "get": {
+                "tags": [
+                    "Admin Agents"
+                ],
+                "summary": "Agent performance",
+                "operationId": "302f98176037a294a6610a765a2f731e",
+                "responses": {
+                    "200": {
+                        "description": "Performance data returned"
+                    }
+                }
+            }
+        },
+        "/admin/audit-logs": {
+            "get": {
+                "tags": [
+                    "Admin Audit"
+                ],
+                "summary": "List audit logs",
+                "operationId": "defdb1f5931241b694527c49f9a28fd8",
+                "responses": {
+                    "200": {
+                        "description": "Audit logs listed"
+                    }
+                }
+            }
+        },
+        "/admin/commissions": {
+            "get": {
+                "tags": [
+                    "Admin Commissions"
+                ],
+                "summary": "List commissions",
+                "operationId": "b9fe68c55d9963d391d327687218216d",
+                "responses": {
+                    "200": {
+                        "description": "Commissions listed"
+                    }
+                }
+            }
+        },
+        "/admin/commissions/summary": {
+            "get": {
+                "tags": [
+                    "Admin Commissions"
+                ],
+                "summary": "Commission summary",
+                "operationId": "06912b41f92a8903415143046f0f1c08",
+                "responses": {
+                    "200": {
+                        "description": "Summary returned"
+                    }
+                }
+            }
+        },
+        "/admin/commissions/{commission}/approve": {
+            "post": {
+                "tags": [
+                    "Admin Commissions"
+                ],
+                "summary": "Approve commission",
+                "operationId": "208cf96882579d88382940fe486466f2",
+                "responses": {
+                    "200": {
+                        "description": "Commission approved"
+                    }
+                }
+            }
+        },
+        "/admin/commissions/{commission}/pay": {
+            "post": {
+                "tags": [
+                    "Admin Commissions"
+                ],
+                "summary": "Pay commission",
+                "operationId": "782f658f65b0518cab629f2e7d8566f6",
+                "responses": {
+                    "200": {
+                        "description": "Commission paid"
+                    }
+                }
+            }
+        },
+        "/admin/features": {
+            "get": {
+                "tags": [
+                    "Admin Features"
+                ],
+                "summary": "List subscription features",
+                "operationId": "e6a329e30a3b23900451e464c9fe4ae4",
+                "responses": {
+                    "200": {
+                        "description": "Features listed"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin Features"
+                ],
+                "summary": "Create feature",
+                "operationId": "f96deb56bf6af4f95e2abda2b9d0c342",
+                "responses": {
+                    "201": {
+                        "description": "Feature created"
+                    }
+                }
+            }
+        },
+        "/admin/features/{feature}": {
+            "get": {
+                "tags": [
+                    "Admin Features"
+                ],
+                "summary": "Get feature",
+                "operationId": "0ab591c7f42cf8f370cb3f97881e8fb2",
+                "responses": {
+                    "200": {
+                        "description": "Feature returned"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin Features"
+                ],
+                "summary": "Update feature",
+                "operationId": "cf70f772de572c2895a4360f4f258a55",
+                "responses": {
+                    "200": {
+                        "description": "Feature updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Features"
+                ],
+                "summary": "Delete feature",
+                "operationId": "66a719c73393596b50e7e7b42380b635",
+                "responses": {
+                    "200": {
+                        "description": "Feature deleted"
+                    }
+                }
+            }
+        },
+        "/admin/discounts": {
+            "get": {
+                "tags": [
+                    "Admin Discounts"
+                ],
+                "summary": "List discounts",
+                "operationId": "1a89a3e0d4414a5623ef9e0c1a73f17e",
+                "responses": {
+                    "200": {
+                        "description": "Discounts listed"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin Discounts"
+                ],
+                "summary": "Create discount",
+                "operationId": "a961e8a8296652f1450e09dc791b5ea3",
+                "responses": {
+                    "201": {
+                        "description": "Discount created"
+                    }
+                }
+            }
+        },
+        "/admin/discounts/{discount}": {
+            "get": {
+                "tags": [
+                    "Admin Discounts"
+                ],
+                "summary": "Get discount",
+                "operationId": "f6009a36a989690fb026e1edfe2a80d9",
+                "responses": {
+                    "200": {
+                        "description": "Discount returned"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin Discounts"
+                ],
+                "summary": "Update discount",
+                "operationId": "e52e4ef2bfac0ccc170a6eda5aa57055",
+                "responses": {
+                    "200": {
+                        "description": "Discount updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Discounts"
+                ],
+                "summary": "Delete discount",
+                "operationId": "2e90cdc638ba4ad183932bfa8014cfff",
+                "responses": {
+                    "200": {
+                        "description": "Discount deleted"
+                    }
+                }
+            }
+        },
+        "/admin/settings": {
+            "get": {
+                "tags": [
+                    "Admin Settings"
+                ],
+                "summary": "List platform settings",
+                "operationId": "480e251f72af0525fb9a291e05c16017",
+                "responses": {
+                    "200": {
+                        "description": "Settings listed"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin Settings"
+                ],
+                "summary": "Update platform settings",
+                "operationId": "c6efd2da810b9c1b2779b4d00fb4555e",
+                "responses": {
+                    "200": {
+                        "description": "Settings updated"
+                    }
+                }
+            }
+        },
+        "/admin/revenue/dashboard": {
+            "get": {
+                "tags": [
+                    "Admin Revenue"
+                ],
+                "summary": "Revenue dashboard",
+                "operationId": "ea53c193c0592503784ec98aa320d32a",
+                "responses": {
+                    "200": {
+                        "description": "Dashboard data returned"
+                    }
+                }
+            }
+        },
+        "/admin/revenue/summary": {
+            "get": {
+                "tags": [
+                    "Admin Revenue"
+                ],
+                "summary": "Revenue summary",
+                "operationId": "3d79ae6b6046c49030cb8c1c32bac66b",
+                "responses": {
+                    "200": {
+                        "description": "Summary returned"
+                    }
+                }
+            }
+        },
+        "/admin/revenue/mrr": {
+            "get": {
+                "tags": [
+                    "Admin Revenue"
+                ],
+                "summary": "Monthly recurring revenue",
+                "operationId": "46c6f29b4a1cb2eff95a5169f69283ec",
+                "responses": {
+                    "200": {
+                        "description": "MRR returned"
+                    }
+                }
+            }
+        },
+        "/admin/revenue/arr": {
+            "get": {
+                "tags": [
+                    "Admin Revenue"
+                ],
+                "summary": "Annual recurring revenue",
+                "operationId": "79e0c46c3012a82b9bad108a2693cf3a",
+                "responses": {
+                    "200": {
+                        "description": "ARR returned"
+                    }
+                }
+            }
+        },
+        "/admin/revenue/churn": {
+            "get": {
+                "tags": [
+                    "Admin Revenue"
+                ],
+                "summary": "Revenue churn rate",
+                "operationId": "ac5471bd5e9d50d373afa6b44de6e055",
+                "responses": {
+                    "200": {
+                        "description": "Churn data returned"
+                    }
+                }
+            }
+        },
+        "/admin/revenue/ltv": {
+            "get": {
+                "tags": [
+                    "Admin Revenue"
+                ],
+                "summary": "Customer lifetime value",
+                "operationId": "6f30e519e2007751937aae57ba17cd89",
+                "responses": {
+                    "200": {
+                        "description": "LTV returned"
+                    }
+                }
+            }
+        },
+        "/admin/revenue/trend": {
+            "get": {
+                "tags": [
+                    "Admin Revenue"
+                ],
+                "summary": "Revenue trend",
+                "operationId": "3869e875211f5375f38ebb25c5924c09",
+                "responses": {
+                    "200": {
+                        "description": "Trend returned"
+                    }
+                }
+            }
+        },
+        "/admin/revenue/by-plan": {
+            "get": {
+                "tags": [
+                    "Admin Revenue"
+                ],
+                "summary": "Revenue by plan",
+                "operationId": "335b92cb3fa794ca7be0aecaf96600ed",
+                "responses": {
+                    "200": {
+                        "description": "Revenue by plan returned"
+                    }
+                }
+            }
+        },
+        "/admin/plans": {
+            "get": {
+                "tags": [
+                    "Admin Plans"
+                ],
+                "summary": "List subscription plans",
+                "operationId": "329d15564b2573719366bf05b95ca46d",
+                "responses": {
+                    "200": {
+                        "description": "Plans listed"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin Plans"
+                ],
+                "summary": "Create subscription plan",
+                "operationId": "9b3bfd1c52625ac29d146896bc738003",
+                "responses": {
+                    "201": {
+                        "description": "Plan created"
+                    }
+                }
+            }
+        },
+        "/admin/plans/{plan}": {
+            "get": {
+                "tags": [
+                    "Admin Plans"
+                ],
+                "summary": "Get subscription plan",
+                "operationId": "e892067975ddc18f5339af9e7956d00b",
+                "responses": {
+                    "200": {
+                        "description": "Plan returned"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin Plans"
+                ],
+                "summary": "Update subscription plan",
+                "operationId": "45176758f34657648f8963938b6ded0b",
+                "responses": {
+                    "200": {
+                        "description": "Plan updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Plans"
+                ],
+                "summary": "Delete subscription plan",
+                "operationId": "9c942a96a74641464fef043594c983f5",
+                "responses": {
+                    "200": {
+                        "description": "Plan deleted"
+                    }
+                }
+            }
+        },
+        "/admin/health": {
+            "get": {
+                "tags": [
+                    "Admin Health"
+                ],
+                "summary": "System health status",
+                "operationId": "e62ea65d7974a50847a20ef289cf33dd",
+                "responses": {
+                    "200": {
+                        "description": "Health status returned"
+                    }
+                }
+            }
+        },
+        "/admin/tenants": {
+            "get": {
+                "tags": [
+                    "Admin Tenants"
+                ],
+                "summary": "List tenants",
+                "operationId": "ac1dc66d26687e71a82913a7ff5b4a64",
+                "responses": {
+                    "200": {
+                        "description": "Tenants listed"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin Tenants"
+                ],
+                "summary": "Create tenant",
+                "operationId": "916f196da9d4f68e28938bf6bc3133e7",
+                "responses": {
+                    "201": {
+                        "description": "Tenant created"
+                    }
+                }
+            }
+        },
+        "/admin/tenants/{tenant}": {
+            "get": {
+                "tags": [
+                    "Admin Tenants"
+                ],
+                "summary": "Get tenant",
+                "operationId": "07298926fbbb5785ef148cfb81b1432b",
+                "responses": {
+                    "200": {
+                        "description": "Tenant returned"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin Tenants"
+                ],
+                "summary": "Update tenant",
+                "operationId": "cbeac19ae6fa747fb3c73053faaf936c",
+                "responses": {
+                    "200": {
+                        "description": "Tenant updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Tenants"
+                ],
+                "summary": "Delete tenant",
+                "operationId": "eb64601970217d82bf8c532c078e97e1",
+                "responses": {
+                    "200": {
+                        "description": "Tenant deleted"
+                    }
+                }
+            }
+        },
+        "/admin/tenants/{tenant}/suspend": {
+            "post": {
+                "tags": [
+                    "Admin Tenants"
+                ],
+                "summary": "Suspend tenant",
+                "operationId": "1435be8e285e61cfaa62a9ebbce12ab8",
+                "responses": {
+                    "200": {
+                        "description": "Tenant suspended"
+                    }
+                }
+            }
+        },
+        "/admin/tenants/{tenant}/activate": {
+            "post": {
+                "tags": [
+                    "Admin Tenants"
+                ],
+                "summary": "Activate tenant",
+                "operationId": "87c85377f470d45f008afcec320aaca0",
+                "responses": {
+                    "200": {
+                        "description": "Tenant activated"
+                    }
+                }
+            }
+        },
+        "/admin/tenants/{tenant}/cancel": {
+            "post": {
+                "tags": [
+                    "Admin Tenants"
+                ],
+                "summary": "Cancel tenant",
+                "operationId": "362af5b7e8100e714098fc3139ad0d43",
+                "responses": {
+                    "200": {
+                        "description": "Tenant cancelled"
+                    }
+                }
+            }
+        },
+        "/admin/tenants/{tenant}/impersonate": {
+            "post": {
+                "tags": [
+                    "Admin Tenants"
+                ],
+                "summary": "Impersonate tenant",
+                "operationId": "f0cb23a66aba0b30bbb8f807780c62a5",
+                "responses": {
+                    "200": {
+                        "description": "Impersonation token returned"
+                    }
+                }
+            }
+        },
+        "/agent/commissions": {
+            "get": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "List agent commissions",
+                "operationId": "ac509b2935e3486a0cc7df48186c7bb9",
+                "responses": {
+                    "200": {
+                        "description": "Commissions listed"
+                    }
+                }
+            }
+        },
+        "/agent/commissions/summary": {
+            "get": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "Commission summary",
+                "operationId": "f78a07d5bc660e0bff7bf789c93176b5",
+                "responses": {
+                    "200": {
+                        "description": "Summary returned"
+                    }
+                }
+            }
+        },
+        "/agent/commissions/{id}": {
+            "get": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "Get commission",
+                "operationId": "25d7c3d632bffa3231c750184e94d4c2",
+                "responses": {
+                    "200": {
+                        "description": "Commission returned"
+                    }
+                }
+            }
+        },
+        "/agent/dashboard": {
+            "get": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "Agent dashboard",
+                "operationId": "a6ceb73d6e8471e1ada93d6bce89c46b",
+                "responses": {
+                    "200": {
+                        "description": "Dashboard data returned"
+                    }
+                }
+            }
+        },
+        "/agent/dashboard/profile": {
+            "get": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "Agent profile",
+                "operationId": "73ce80c670dbb4d9f5f6b26f49c11b36",
+                "responses": {
+                    "200": {
+                        "description": "Profile returned"
+                    }
+                }
+            }
+        },
+        "/agent/payouts": {
+            "get": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "List agent payouts",
+                "operationId": "beb33ebc3329d78c1583a831e1fd4246",
+                "responses": {
+                    "200": {
+                        "description": "Payouts listed"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "Request payout",
+                "operationId": "a2011345dc6a72db4f5be85a117d7afc",
+                "responses": {
+                    "201": {
+                        "description": "Payout requested"
+                    }
+                }
+            }
+        },
+        "/agent/payouts/{id}": {
+            "get": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "Get payout",
+                "operationId": "e920e769c4765159d9d038ea9babca67",
+                "responses": {
+                    "200": {
+                        "description": "Payout returned"
+                    }
+                }
+            }
+        },
+        "/agent/referrals": {
+            "get": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "List agent referrals",
+                "operationId": "34401c1636e88f5e099ac85495043c38",
+                "responses": {
+                    "200": {
+                        "description": "Referrals listed"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "Create referral",
+                "operationId": "22f523229b79743cef6daceba2c8672c",
+                "responses": {
+                    "201": {
+                        "description": "Referral created"
+                    }
+                }
+            }
+        },
+        "/agent/referrals/{id}": {
+            "get": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "Get referral",
+                "operationId": "25b213313b8203e2a6a8e70b6f043870",
+                "responses": {
+                    "200": {
+                        "description": "Referral returned"
+                    }
+                }
+            }
+        },
+        "/agent/referrals/{id}/stats": {
+            "get": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "Referral stats",
+                "operationId": "112251b41a0bf4503f5255312527a8f8",
+                "responses": {
+                    "200": {
+                        "description": "Stats returned"
+                    }
+                }
+            }
+        },
+        "/agent/referrals/track": {
+            "post": {
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "Track referral click",
+                "operationId": "9b8c344fbcf22af32d52bcd27187ea21",
+                "responses": {
+                    "200": {
+                        "description": "Click tracked"
+                    }
+                }
+            }
+        },
+        "/agent/auth/register": {
+            "post": {
+                "tags": [
+                    "Agent Auth"
+                ],
+                "summary": "Register a new agent",
+                "description": "Public agent registration — creates AgentUser + Agent profile, returns token.",
+                "operationId": "79ec30e5e901801a4ac4cc2bc9a36320",
+                "responses": {
+                    "201": {
+                        "description": "Agent registered with token"
+                    }
+                }
+            }
+        },
+        "/agent/auth/login": {
+            "post": {
+                "tags": [
+                    "Agent Auth"
+                ],
+                "summary": "Login as agent",
+                "description": "Public agent login — returns token.",
+                "operationId": "ecadc720703cb32921dcc9936d424555",
+                "responses": {
+                    "200": {
+                        "description": "Agent token returned"
+                    }
+                }
+            }
+        },
+        "/agent/auth/me": {
+            "get": {
+                "tags": [
+                    "Agent Auth"
+                ],
+                "summary": "Get current agent profile",
+                "description": "Get current agent profile (authenticated).",
+                "operationId": "53f26b3ac57e42b8736cfa7718c018dc",
+                "responses": {
+                    "200": {
+                        "description": "Agent profile"
+                    }
+                }
+            }
+        },
+        "/agent/auth/profile": {
+            "get": {
+                "tags": [
+                    "Agent Auth"
+                ],
+                "summary": "Get agent profile read-only view",
+                "description": "Get current agent profile (authenticated) — read-only view.",
+                "operationId": "7ff864f21fc5f0a7122e3ab06fbf0639",
+                "responses": {
+                    "200": {
+                        "description": "Agent profile"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Agent Auth"
+                ],
+                "summary": "Update agent profile",
+                "description": "Update current agent profile — name, email, phone.",
+                "operationId": "98ad0afe4a949deb4135bd037ae4f260",
+                "responses": {
+                    "200": {
+                        "description": "Profile updated"
+                    }
+                }
+            }
+        },
+        "/agent/auth/change-password": {
+            "post": {
+                "tags": [
+                    "Agent Auth"
+                ],
+                "summary": "Change agent password",
+                "description": "Change current agent password.",
+                "operationId": "7d824c46a70e1fbbb9f0641771e70dbd",
+                "responses": {
+                    "200": {
+                        "description": "Password changed"
+                    }
+                }
+            }
+        },
+        "/agent/auth/logout": {
+            "post": {
+                "tags": [
+                    "Agent Auth"
+                ],
+                "summary": "Logout and revoke token",
+                "description": "Logout — revoke current token.",
+                "operationId": "1e51f36ae1d2f11d903b6858a0bbd895",
+                "responses": {
+                    "200": {
+                        "description": "Logged out"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login with email & password",
+                "operationId": "985cd5203e2d0a820e113f2f4fdb2847",
+                "responses": {
+                    "200": {
+                        "description": "Login successful"
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register a new user",
+                "operationId": "8f20688904ee49d0d8739eeb08faf0b1",
+                "responses": {
+                    "201": {
+                        "description": "Registration successful"
+                    }
+                }
+            }
+        },
+        "/auth/me": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get authenticated user profile",
+                "operationId": "e339e0e74860c0647fd1d41bbbbc13b2",
+                "responses": {
+                    "200": {
+                        "description": "User profile"
+                    }
+                }
+            }
+        },
+        "/bank-reconciliation/{id}": {
+            "get": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Get a bank reconciliation",
+                "operationId": "2c4d01c1ce5690361e03abe319ad94bc",
+                "responses": {
+                    "200": {
+                        "description": "Reconciliation details"
+                    }
+                }
+            }
+        },
+        "/bank-reconciliation/{id}/complete": {
+            "post": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Complete a bank reconciliation",
+                "operationId": "37367b0a6e0524ee7fc51e17d6ddf369",
+                "responses": {
+                    "200": {
+                        "description": "Reconciliation completed"
+                    }
+                }
+            }
+        },
+        "/bank-reconciliation/{id}/items": {
+            "post": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Add item to bank reconciliation",
+                "operationId": "cd57f782136c253bb8682ce1cf178c40",
+                "responses": {
+                    "201": {
+                        "description": "Item added"
+                    }
+                }
+            }
+        },
+        "/bank-reconciliation/{id}/items/{itemId}": {
+            "delete": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Remove item from bank reconciliation",
+                "operationId": "07f32ffc02850408d5265c27dc7f173c",
+                "responses": {
+                    "200": {
+                        "description": "Item removed"
+                    }
+                }
+            }
+        },
+        "/billing/checkout": {
+            "post": {
+                "tags": [
+                    "Billing"
+                ],
+                "summary": "Create checkout session",
+                "description": "Create a checkout session and return Pesapal iframe URL.",
+                "operationId": "3874bfe4ec7071ce758bb67cd18ac693",
+                "responses": {
+                    "200": {
+                        "description": "Checkout URL returned"
+                    }
+                }
+            }
+        },
+        "/billing/callback": {
+            "get": {
+                "tags": [
+                    "Billing"
+                ],
+                "summary": "Pesapal callback",
+                "description": "Pesapal callback — user redirected here after payment.",
+                "operationId": "9ba54d9273d214d79fd04e06a01c0f2f",
+                "responses": {
+                    "200": {
+                        "description": "Payment status"
+                    }
+                }
+            }
+        },
+        "/billing/ipn": {
+            "post": {
+                "tags": [
+                    "Billing"
+                ],
+                "summary": "Pesapal IPN notification",
+                "description": "Pesapal IPN — server-to-server notification.",
+                "operationId": "720493233b1abfb7736c3794509d068a",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/billing/status/{orderId}": {
+            "get": {
+                "tags": [
+                    "Billing"
+                ],
+                "summary": "Check payment status",
+                "description": "Check payment status.",
+                "operationId": "aa7db172502b50049dfa493e4bd29327",
+                "responses": {
+                    "200": {
+                        "description": "Payment status"
+                    }
+                }
+            }
+        },
+        "/billing/subscription": {
+            "get": {
+                "tags": [
+                    "Billing"
+                ],
+                "summary": "Get current subscription",
+                "description": "Get current subscription.",
+                "operationId": "faaa904842a5c1681889b6316d08b61b",
+                "responses": {
+                    "200": {
+                        "description": "Subscription details"
+                    }
+                }
+            }
+        },
+        "/billing/history": {
+            "get": {
+                "tags": [
+                    "Billing"
+                ],
+                "summary": "Get billing history",
+                "description": "Get billing history.",
+                "operationId": "b122cd27e5d5292a7cfc282744183a4e",
+                "responses": {
+                    "200": {
+                        "description": "Paginated billing history"
+                    }
+                }
+            }
+        },
+        "/branches/{id}": {
+            "get": {
+                "tags": [
+                    "Branches"
+                ],
+                "summary": "Get branch details",
+                "operationId": "eb5e5f2a01827cc7d7745a7c43274e42",
+                "responses": {
+                    "200": {
+                        "description": "Branch data"
+                    }
+                }
+            }
+        },
+        "/cash-register/status": {
+            "get": {
+                "tags": [
+                    "Cash Register"
+                ],
+                "summary": "Get status",
+                "operationId": "2cc3a2335b6c42356817184032b0d07f",
+                "responses": {
+                    "200": {
+                        "description": "Current shift"
+                    }
+                }
+            }
+        },
+        "/cash-register/open": {
+            "post": {
+                "tags": [
+                    "Cash Register"
+                ],
+                "summary": "Open shift",
+                "operationId": "9de799cdec5ee466ff4ba8cfe60fde21",
+                "responses": {
+                    "201": {
+                        "description": "Shift opened"
+                    }
+                }
+            }
+        },
+        "/cash-register/close": {
+            "post": {
+                "tags": [
+                    "Cash Register"
+                ],
+                "summary": "Close shift",
+                "operationId": "be48c490e1b536ef145118fdfa623041",
+                "responses": {
+                    "200": {
+                        "description": "Shift closed"
+                    }
+                }
+            }
+        },
+        "/categories/{id}": {
+            "put": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Update a category",
+                "operationId": "1288a970d20e27471ee65193d80a7376",
+                "responses": {
+                    "200": {
+                        "description": "Category updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Categories"
+                ],
+                "summary": "Delete a category",
+                "operationId": "b44a8c51f51902cd21c41c92ba0076f2",
+                "responses": {
+                    "200": {
+                        "description": "Category deleted"
+                    }
+                }
+            }
+        },
+        "/chart-of-accounts/{id}": {
+            "get": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Get a chart of account",
+                "operationId": "e8d1f31dfc64b67dd5220df6e88f719e",
+                "responses": {
+                    "200": {
+                        "description": "Account details"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Update a chart of account",
+                "operationId": "eab616c21df002391d8df3c10f4787b6",
+                "responses": {
+                    "200": {
+                        "description": "Account updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Delete a chart of account",
+                "operationId": "3103e0a7535c585810a2d9a6c3ea788b",
+                "responses": {
+                    "200": {
+                        "description": "Account deleted"
+                    }
+                }
+            }
+        },
+        "/devices/enroll": {
+            "post": {
+                "tags": [
+                    "Devices"
+                ],
+                "summary": "Enroll a device",
+                "operationId": "743bb3da6ef624a364b238cc8598aa30",
+                "responses": {
+                    "200": {
+                        "description": "Enrolled device"
+                    }
+                }
+            }
+        },
+        "/devices/heartbeat": {
+            "post": {
+                "tags": [
+                    "Devices"
+                ],
+                "summary": "Device heartbeat",
+                "operationId": "69a3177ba124bfb3a690c5c8b918bc07",
+                "responses": {
+                    "200": {
+                        "description": "Heartbeat acknowledged"
+                    }
+                }
+            }
+        },
+        "/documents": {
+            "get": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "List documents",
+                "operationId": "91baba3781853419e91be2658ba5f112",
+                "responses": {
+                    "200": {
+                        "description": "Paginated documents"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Create document",
+                "operationId": "ce665670740a1ca5e10b9bfafa05a0fa",
+                "responses": {
+                    "201": {
+                        "description": "Document created"
+                    }
+                }
+            }
+        },
+        "/efris/fiscalize-sale/{saleId}": {
+            "post": {
+                "tags": [
+                    "EFRIS"
+                ],
+                "summary": "Fiscalize a sale",
+                "operationId": "3910761e3c1cb0909d7587bc22960fc2",
+                "responses": {
+                    "200": {
+                        "description": "Fiscalization result"
+                    }
+                }
+            }
+        },
+        "/efris/query-invoices": {
+            "post": {
+                "tags": [
+                    "EFRIS"
+                ],
+                "summary": "Query invoices from EFRIS",
+                "operationId": "1beb64180d106070358e8feaaba73918",
+                "responses": {
+                    "200": {
+                        "description": "Invoice list"
+                    }
+                }
+            }
+        },
+        "/efris/invoice/{invoiceNo}": {
+            "get": {
+                "tags": [
+                    "EFRIS"
+                ],
+                "summary": "Get invoice details from EFRIS",
+                "operationId": "74be36fef313efa3114715e462086c48",
+                "responses": {
+                    "200": {
+                        "description": "Invoice details"
+                    }
+                }
+            }
+        },
+        "/efris/credit-note": {
+            "post": {
+                "tags": [
+                    "EFRIS"
+                ],
+                "summary": "Apply credit note via EFRIS",
+                "operationId": "9d55dbf25a5e5c2c57542f3462d24e56",
+                "responses": {
+                    "200": {
+                        "description": "Credit note applied"
+                    }
+                }
+            }
+        },
+        "/efris/sync-products": {
+            "post": {
+                "tags": [
+                    "EFRIS"
+                ],
+                "summary": "Sync products with EFRIS",
+                "operationId": "e0e90e4f088b2122a87abb2d10340e1e",
+                "responses": {
+                    "200": {
+                        "description": "Product list"
+                    }
+                }
+            }
+        },
+        "/efris/register-products": {
+            "post": {
+                "tags": [
+                    "EFRIS"
+                ],
+                "summary": "Register products with EFRIS",
+                "operationId": "534c103ecf46e21b96b9c6a5bd4e3558",
+                "responses": {
+                    "200": {
+                        "description": "Products registered"
+                    }
+                }
+            }
+        },
+        "/efris/increase-stock": {
+            "post": {
+                "tags": [
+                    "EFRIS"
+                ],
+                "summary": "Increase stock via EFRIS",
+                "operationId": "c0e392ccb74cd18c3e0535ddaa70da5e",
+                "responses": {
+                    "200": {
+                        "description": "Stock increased"
+                    }
+                }
+            }
+        },
+        "/efris/decrease-stock": {
+            "post": {
+                "tags": [
+                    "EFRIS"
+                ],
+                "summary": "Decrease stock via EFRIS",
+                "operationId": "39f0ccb842646dd055742e6b7a97e0f6",
+                "responses": {
+                    "200": {
+                        "description": "Stock decreased"
+                    }
+                }
+            }
+        },
+        "/efris/transfer-stock": {
+            "post": {
+                "tags": [
+                    "EFRIS"
+                ],
+                "summary": "Transfer stock via EFRIS",
+                "operationId": "a4ea43b37e68916caddf32294e1f9a6c",
+                "responses": {
+                    "200": {
+                        "description": "Stock transferred"
+                    }
+                }
+            }
+        },
+        "/efris/search-taxpayer": {
+            "post": {
+                "tags": [
+                    "EFRIS"
+                ],
+                "summary": "Search taxpayer by TIN",
+                "operationId": "282eef10eac44111b073c0f92a82a774",
+                "responses": {
+                    "200": {
+                        "description": "Taxpayer details"
+                    }
+                }
+            }
+        },
+        "/efris/registration-details": {
+            "get": {
+                "tags": [
+                    "EFRIS"
+                ],
+                "summary": "Get EFRIS registration details",
+                "operationId": "44a1a14a77659d57cf0cc7e0520a2c06",
+                "responses": {
+                    "200": {
+                        "description": "Registration details"
+                    }
+                }
+            }
+        },
+        "/efris/logs": {
+            "get": {
+                "tags": [
+                    "EFRIS"
+                ],
+                "summary": "Get EFRIS fiscal logs",
+                "operationId": "88c5688ca99464da466e681bcfe41ea5",
+                "responses": {
+                    "200": {
+                        "description": "Paginated fiscal logs"
+                    }
+                }
+            }
+        },
+        "/expenses": {
+            "get": {
+                "tags": [
+                    "Expenses"
+                ],
+                "summary": "List expenses",
+                "operationId": "02dd0399645db746ef68a9bcdab69338",
+                "responses": {
+                    "200": {
+                        "description": "Paginated expenses"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Expenses"
+                ],
+                "summary": "Record expense",
+                "operationId": "c751fc8afec0e421ff4180beb6d02e87",
+                "responses": {
+                    "201": {
+                        "description": "Expense recorded"
+                    }
+                }
+            }
+        },
+        "/api/v1/health": {
+            "get": {
+                "tags": [
+                    "Health"
+                ],
+                "summary": "System health check",
+                "description": "Returns database, Redis, and queue status with latency metrics.",
+                "operationId": "388d0cfe5e8c4f1d695d0ba10d3d2b6c",
+                "responses": {
+                    "200": {
+                        "description": "System healthy",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "enum": [
+                                                "healthy",
+                                                "degraded"
+                                            ]
+                                        },
+                                        "timestamp": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "checks": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "System degraded"
+                    }
+                }
+            }
+        },
+        "/integrations/available": {
+            "get": {
+                "tags": [
+                    "Integrations"
+                ],
+                "summary": "List available integrations",
+                "operationId": "19cc1077ed4b940139d491e66ea23667",
+                "responses": {
+                    "200": {
+                        "description": "Available integrations"
+                    }
+                }
+            }
+        },
+        "/integrations/{id}": {
+            "get": {
+                "tags": [
+                    "Integrations"
+                ],
+                "summary": "Get an integration",
+                "operationId": "52e83fb1aaed383fd60e144e6b4c229a",
+                "responses": {
+                    "200": {
+                        "description": "Integration details"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Integrations"
+                ],
+                "summary": "Update an integration",
+                "operationId": "e4133b5f9f1d68cc3c15f0a551a1aea4",
+                "responses": {
+                    "200": {
+                        "description": "Integration updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Integrations"
+                ],
+                "summary": "Disconnect an integration",
+                "operationId": "21afbce535616661f809edcce91b27f2",
+                "responses": {
+                    "200": {
+                        "description": "Integration disconnected"
+                    }
+                }
+            }
+        },
+        "/integrations/{id}/test": {
+            "post": {
+                "tags": [
+                    "Integrations"
+                ],
+                "summary": "Test integration connection",
+                "operationId": "f7571a3c45b785ebcd17ed71e98bdfdb",
+                "responses": {
+                    "200": {
+                        "description": "Test result"
+                    }
+                }
+            }
+        },
+        "/integrations/{id}/sync": {
+            "post": {
+                "tags": [
+                    "Integrations"
+                ],
+                "summary": "Sync integration offline queue",
+                "operationId": "2ea258cf13ec267115cccb0c88f70697",
+                "responses": {
+                    "200": {
+                        "description": "Sync results"
+                    }
+                }
+            }
+        },
+        "/integrations/{id}/logs": {
+            "get": {
+                "tags": [
+                    "Integrations"
+                ],
+                "summary": "Get integration logs",
+                "operationId": "2ae1dd8f1b78865bad355eac07f7fbb6",
+                "responses": {
+                    "200": {
+                        "description": "Paginated logs"
+                    }
+                }
+            }
+        },
+        "/inventory-adjustments/types": {
+            "get": {
+                "tags": [
+                    "Inventory Adjustments"
+                ],
+                "summary": "List adjustment types",
+                "operationId": "35896361e5a63c695d6e3f6cc8942212",
+                "responses": {
+                    "200": {
+                        "description": "Adjustment types"
+                    }
+                }
+            }
+        },
+        "/inventory/stock": {
+            "get": {
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Get stock levels",
+                "operationId": "c827410198d896df94cfa48c06278474",
+                "responses": {
+                    "200": {
+                        "description": "Stock data"
+                    }
+                }
+            }
+        },
+        "/inventory/{id}/movements": {
+            "get": {
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Get stock movements",
+                "operationId": "e9f70c8a38b73a72056188e1f1182d9a",
+                "responses": {
+                    "200": {
+                        "description": "Movement history"
+                    }
+                }
+            }
+        },
+        "/journal-entries/{id}": {
+            "get": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Get a journal entry",
+                "operationId": "dbf5c8b72c884a2c298baedd48b19b6c",
+                "responses": {
+                    "200": {
+                        "description": "Journal entry details"
+                    }
+                }
+            }
+        },
+        "/loyalty/current": {
+            "get": {
+                "tags": [
+                    "Loyalty"
+                ],
+                "summary": "Get current loyalty rules",
+                "operationId": "03fc5c5afd6a20e6dfb9d0167715b995",
+                "responses": {
+                    "200": {
+                        "description": "Active loyalty rule"
+                    }
+                }
+            }
+        },
+        "/loyalty/points": {
+            "get": {
+                "tags": [
+                    "Loyalty"
+                ],
+                "summary": "Get customer loyalty points",
+                "operationId": "c8349a343d1bb44c931d22554e9f9e78",
+                "responses": {
+                    "200": {
+                        "description": "Customer points"
+                    }
+                }
+            }
+        },
+        "/loyalty/redeem": {
+            "post": {
+                "tags": [
+                    "Loyalty"
+                ],
+                "summary": "Redeem loyalty points",
+                "operationId": "0689973ba0faffe14a61f16ccc0e49fd",
+                "responses": {
+                    "200": {
+                        "description": "Points redeemed"
+                    }
+                }
+            }
+        },
+        "/notifications/unread-count": {
+            "get": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Get unread notification count",
+                "operationId": "584990badb02c0857a345ef40f46fc7f",
+                "responses": {
+                    "200": {
+                        "description": "Unread count"
+                    }
+                }
+            }
+        },
+        "/notifications/{id}/read": {
+            "post": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Mark notification as read",
+                "operationId": "a9e5c034162d41b52773d26d19688804",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/notifications/read-all": {
+            "post": {
+                "tags": [
+                    "Notifications"
+                ],
+                "summary": "Mark all notifications as read",
+                "operationId": "9d2224b2bde53a5c644fbb8b9534ac69",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            }
+        },
+        "/onboarding/status": {
+            "get": {
+                "tags": [
+                    "Onboarding"
+                ],
+                "summary": "Get onboarding status",
+                "operationId": "ac9615df1bd9002251bcdabb7309d310",
+                "responses": {
+                    "200": {
+                        "description": "Onboarding status"
+                    }
+                }
+            }
+        },
+        "/onboarding/complete": {
+            "post": {
+                "tags": [
+                    "Onboarding"
+                ],
+                "summary": "Complete onboarding",
+                "operationId": "f7854edbb50b8864740c1d17cffd0e6e",
+                "responses": {
+                    "200": {
+                        "description": "Onboarding completed"
+                    }
+                }
+            }
+        },
+        "/onboarding/profile": {
+            "put": {
+                "tags": [
+                    "Onboarding"
+                ],
+                "summary": "Update business profile",
+                "operationId": "5b6a1a7259f9e9166eaaf9dc6502dcfe",
+                "responses": {
+                    "200": {
+                        "description": "Profile updated"
+                    }
+                }
+            }
+        },
+        "/operating-accounts/{id}": {
+            "get": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Get an operating account",
+                "operationId": "05c75f31cfba77f63bca91bd02f362f0",
+                "responses": {
+                    "200": {
+                        "description": "Account details"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Update an operating account",
+                "operationId": "247c4871c46a6b13b7f4b7ba40f745af",
+                "responses": {
+                    "200": {
+                        "description": "Account updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Accounting"
+                ],
+                "summary": "Delete an operating account",
+                "operationId": "fdd901899dfbc453f9e9d2c14c9b5e42",
+                "responses": {
+                    "200": {
+                        "description": "Account deleted"
+                    }
+                }
+            }
+        },
+        "/api/v1/paypal/create-order": {
+            "post": {
+                "tags": [
+                    "PayPal"
+                ],
+                "summary": "Create a PayPal order for subscription payment",
+                "operationId": "c9486833c4f95d239b1c396b941a2c28",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "plan_id",
+                                    "billing_cycle"
+                                ],
+                                "properties": {
+                                    "plan_id": {
+                                        "type": "string"
+                                    },
+                                    "billing_cycle": {
+                                        "type": "string",
+                                        "enum": [
+                                            "monthly",
+                                            "yearly"
+                                        ]
+                                    },
+                                    "discount_code": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PayPal order created with approval URL"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/v1/paypal/capture/{orderId}": {
+            "post": {
+                "tags": [
+                    "PayPal"
+                ],
+                "summary": "Capture a completed PayPal order",
+                "operationId": "1e2d405b377d1d9e383ea3f37790a4ce",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Payment captured successfully"
+                    },
+                    "422": {
+                        "description": "Capture failed"
+                    }
+                }
+            }
+        },
+        "/api/v1/paypal/webhook": {
+            "post": {
+                "tags": [
+                    "PayPal"
+                ],
+                "summary": "PayPal webhook receiver",
+                "description": "Receives and verifies PayPal payment events (capture, refund, denial).",
+                "operationId": "8e924c3f1cb4bfa155600cc42f95bc0d",
+                "responses": {
+                    "200": {
+                        "description": "Webhook processed"
+                    },
+                    "403": {
+                        "description": "Verification failed"
+                    }
+                }
+            }
+        },
+        "/api/v1/paypal/status/{orderId}": {
+            "get": {
+                "tags": [
+                    "PayPal"
+                ],
+                "summary": "Get PayPal order status",
+                "operationId": "908272b5739bf77a7687c3424e5c3daf",
+                "parameters": [
+                    {
+                        "name": "orderId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Order status"
+                    },
+                    "404": {
+                        "description": "Transaction not found"
+                    }
+                }
+            }
+        },
+        "/payments/{saleId}/rollback": {
+            "post": {
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Rollback a payment",
+                "operationId": "4ffd78a04c23d94193a6659e6d401302",
+                "responses": {
+                    "200": {
+                        "description": "Payment rolled back"
+                    }
+                }
+            }
+        },
+        "/pos/products": {
+            "get": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "Get POS products",
+                "operationId": "9ffa84b4bd36746a63a0aceb58df0ebb",
+                "responses": {
+                    "200": {
+                        "description": "POS products with stock info"
+                    }
+                }
+            }
+        },
+        "/pos/hold": {
+            "post": {
+                "tags": [
+                    "POS"
+                ],
+                "summary": "Hold sale",
+                "operationId": "dec63a4e3077a8799116c30da86a1868",
+                "responses": {
+                    "201": {
+                        "description": "Sale held"
+                    }
+                }
+            }
+        },
+        "/api/v1/plans": {
+            "get": {
+                "tags": [
+                    "Public Plans"
+                ],
+                "summary": "List active subscription plans with pricing",
+                "operationId": "97359f51d0fe8c07942f0bbcd0c38421",
+                "parameters": [
+                    {
+                        "name": "currency",
+                        "in": "query",
+                        "description": "Currency code for pricing",
+                        "schema": {
+                            "type": "string",
+                            "default": "USD"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Plans with localized pricing"
+                    }
+                }
+            }
+        },
+        "/api/v1/plans/{slug}": {
+            "get": {
+                "tags": [
+                    "Public Plans"
+                ],
+                "summary": "Get a single plan by slug",
+                "operationId": "850d4f07bac427bd5e52e4845fa714e1",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "currency",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "default": "USD"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Plan details"
+                    },
+                    "404": {
+                        "description": "Plan not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/currencies": {
+            "get": {
+                "tags": [
+                    "Public Plans"
+                ],
+                "summary": "List active currencies",
+                "operationId": "56ac1af64c30fea7235f4916e9a5a1ee",
+                "responses": {
+                    "200": {
+                        "description": "Active currencies"
+                    }
+                }
+            }
+        },
+        "/purchase-orders/{id}/transition": {
+            "post": {
+                "tags": [
+                    "Purchase Orders"
+                ],
+                "summary": "Transition PO status",
+                "operationId": "d3c14ebcd4d3920b549ec595016b5fae",
+                "responses": {
+                    "200": {
+                        "description": "Status updated"
+                    }
+                }
+            }
+        },
+        "/reports/sales-trend": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Sales trend over time",
+                "operationId": "9b4c3ed6c5ea7594d16567e5347933d4",
+                "responses": {
+                    "200": {
+                        "description": "Trend data"
+                    }
+                }
+            }
+        },
+        "/reports/top-products": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Top selling products",
+                "operationId": "b71cc6b6f1bb6e7e7b86f1009663831b",
+                "responses": {
+                    "200": {
+                        "description": "Top products"
+                    }
+                }
+            }
+        },
+        "/reports/revenue-by-payment": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Revenue by payment method",
+                "operationId": "65c514ba90ed80552d2ef9f1c7465250",
+                "responses": {
+                    "200": {
+                        "description": "Payment breakdown"
+                    }
+                }
+            }
+        },
+        "/reports/daily-revenue": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Daily revenue report",
+                "operationId": "7b1ad4474ddd5be4868f5e6074440162",
+                "responses": {
+                    "200": {
+                        "description": "Daily revenue"
+                    }
+                }
+            }
+        },
+        "/reports/tax": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Tax report",
+                "operationId": "a4bec2af29bbe99dc2f75ab0b590c1eb",
+                "responses": {
+                    "200": {
+                        "description": "Tax data"
+                    }
+                }
+            }
+        },
+        "/reports/profit-loss": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Profit and loss report",
+                "operationId": "f2086a5b02f4ab7b1a3d1c0cb6fc3f39",
+                "responses": {
+                    "200": {
+                        "description": "P&L data"
+                    }
+                }
+            }
+        },
+        "/reports/sales-journal": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Sales journal",
+                "operationId": "05960ad19fb7ca3582cee9db42e7bd9a",
+                "responses": {
+                    "200": {
+                        "description": "Journal data"
+                    }
+                }
+            }
+        },
+        "/reports/inventory-movement": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Inventory movement report",
+                "operationId": "38502cee4f6b7b40f4eadbe4ec6b0506",
+                "responses": {
+                    "200": {
+                        "description": "Movement data"
+                    }
+                }
+            }
+        },
+        "/reports/customer-statement": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Customer statement report",
+                "operationId": "4aedf9119ec84a378073816ca3f5ecc2",
+                "responses": {
+                    "200": {
+                        "description": "Customer data"
+                    }
+                }
+            }
+        },
+        "/reports/sales-by-user": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Sales by user",
+                "operationId": "335fb66eb34ffa7ac5a2cea85899a887",
+                "responses": {
+                    "200": {
+                        "description": "User sales data"
+                    }
+                }
+            }
+        },
+        "/reports/cogs": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Cost of goods sold",
+                "operationId": "3cb46618b7498bc0b01b370f89c8bc35",
+                "responses": {
+                    "200": {
+                        "description": "COGS data"
+                    }
+                }
+            }
+        },
+        "/reports/payments-reconciliation": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Payments reconciliation",
+                "operationId": "f15d6cf5f43f58f6ea16d9ed870fdd96",
+                "responses": {
+                    "200": {
+                        "description": "Reconciliation data"
+                    }
+                }
+            }
+        },
+        "/reports/trial-balance": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Trial balance",
+                "operationId": "82ecbcbf205315e144fb4b9c670a86f3",
+                "responses": {
+                    "200": {
+                        "description": "Trial balance data"
+                    }
+                }
+            }
+        },
+        "/reports/balance-sheet": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Balance sheet",
+                "operationId": "8e99003c489d49c9f62800c6ac1216c0",
+                "responses": {
+                    "200": {
+                        "description": "Balance sheet data"
+                    }
+                }
+            }
+        },
+        "/reports/income-statement": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Income statement",
+                "operationId": "d18d78eff6fd1c4e6f059124c1af7a56",
+                "responses": {
+                    "200": {
+                        "description": "Income statement data"
+                    }
+                }
+            }
+        },
+        "/reports/general-ledger": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "General ledger",
+                "operationId": "7037eda86840d546cf95d5713bf7d202",
+                "responses": {
+                    "200": {
+                        "description": "Ledger data"
+                    }
+                }
+            }
+        },
+        "/reports/low-stock": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Low stock report",
+                "operationId": "a9f63d210d667726da0ad4f8c740c260",
+                "responses": {
+                    "200": {
+                        "description": "Low stock items"
+                    }
+                }
+            }
+        },
+        "/reports/inventory-valuation": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Inventory valuation",
+                "operationId": "b75b9ed44a2551fc5e948742ebb4cc6b",
+                "responses": {
+                    "200": {
+                        "description": "Valuation data"
+                    }
+                }
+            }
+        },
+        "/reports/purchase-orders": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Purchase orders report",
+                "operationId": "082ed18080b954a57a25e38420292aaf",
+                "responses": {
+                    "200": {
+                        "description": "PO data"
+                    }
+                }
+            }
+        },
+        "/reports/loyalty-points": {
+            "get": {
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Loyalty points report",
+                "operationId": "3b4eed6ab5bcb905642bfe037d1fee1a",
+                "responses": {
+                    "200": {
+                        "description": "Loyalty data"
+                    }
+                }
+            }
+        },
+        "/api/v1/returns": {
+            "post": {
+                "tags": [
+                    "Returns"
+                ],
+                "summary": "Create a sales return",
+                "operationId": "b08a69cbd439dbd0e413b047c7ff1c1e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "sale_id",
+                                    "branch_id",
+                                    "items"
+                                ],
+                                "properties": {
+                                    "sale_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "branch_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "reason": {
+                                        "type": "string"
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "product_id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "quantity": {
+                                                    "type": "number"
+                                                },
+                                                "reason": {
+                                                    "type": "string"
+                                                },
+                                                "condition": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "returnable",
+                                                        "damaged",
+                                                        "defect"
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Return created"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/v1/returns/{id}/approve": {
+            "post": {
+                "tags": [
+                    "Returns"
+                ],
+                "summary": "Approve a pending return and process refund",
+                "operationId": "28cd8bba88441953808bc9c3544b623d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return approved"
+                    },
+                    "400": {
+                        "description": "Invalid return status"
+                    }
+                }
+            }
+        },
+        "/roles/{id}": {
+            "get": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Get role details",
+                "operationId": "e0508ea26d3e3d56a2709f20b036bc65",
+                "responses": {
+                    "200": {
+                        "description": "Role data"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Update a role",
+                "operationId": "8e396fe65e7a7fed7fad9d6d04061d83",
+                "responses": {
+                    "200": {
+                        "description": "Role updated"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Delete a role",
+                "operationId": "92cfdf2628b5ecbe48684f0b14b35e53",
+                "responses": {
+                    "200": {
+                        "description": "Role deleted"
+                    }
+                }
+            }
+        },
+        "/roles/{id}/permissions": {
+            "put": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Sync role permissions",
+                "operationId": "98f03ff4aa10069b55621516bfa7dfb0",
+                "responses": {
+                    "200": {
+                        "description": "Permissions synced"
+                    }
+                }
+            }
+        },
+        "/roles/permissions": {
+            "get": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "List all permissions",
+                "operationId": "6e755b5ee71b1a932e50a3505a61d296",
+                "responses": {
+                    "200": {
+                        "description": "Permission list"
+                    }
+                }
+            }
+        },
+        "/sales": {
+            "get": {
+                "tags": [
+                    "Sales"
+                ],
+                "summary": "List sales",
+                "operationId": "b532b2f6743242953ee87daa47b9b964",
+                "responses": {
+                    "200": {
+                        "description": "Paginated sales"
+                    }
+                }
+            }
+        },
+        "/stock-transfers/{id}/complete": {
+            "post": {
+                "tags": [
+                    "Stock Transfers"
+                ],
+                "summary": "Complete a stock transfer",
+                "operationId": "149a59b56601f7fad505cea188ed7806",
+                "responses": {
+                    "200": {
+                        "description": "Transfer completed"
+                    }
+                }
+            }
+        },
+        "/stock-transfers/{id}/cancel": {
+            "post": {
+                "tags": [
+                    "Stock Transfers"
+                ],
+                "summary": "Cancel a stock transfer",
+                "operationId": "140c07c856ab06c3e795838fbfa2bfc9",
+                "responses": {
+                    "200": {
+                        "description": "Transfer cancelled"
+                    }
+                }
+            }
+        },
+        "/subscriptions/current": {
+            "get": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Get current subscription with limits",
+                "operationId": "6990b40a4909601c42d13cd02cbbecff",
+                "responses": {
+                    "200": {
+                        "description": "Current subscription details"
+                    }
+                }
+            }
+        },
+        "/subscriptions/{id}": {
+            "get": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Get a subscription",
+                "operationId": "7f6bfd6900a42b5d371cc04dd334aa53",
+                "responses": {
+                    "200": {
+                        "description": "Subscription details"
+                    }
+                }
+            }
+        },
+        "/subscriptions/cancel": {
+            "post": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Cancel subscription",
+                "operationId": "43f45024d6886536a9e67ef919607b85",
+                "responses": {
+                    "200": {
+                        "description": "Subscription cancelled"
+                    }
+                }
+            }
+        },
+        "/subscriptions/plans": {
+            "get": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "List available plans",
+                "operationId": "2eab3e743d973e20ab793e6c621bd348",
+                "responses": {
+                    "200": {
+                        "description": "Available plans"
+                    }
+                }
+            }
+        },
+        "/sync/start": {
+            "post": {
+                "tags": [
+                    "Sync"
+                ],
+                "summary": "Start sync process",
+                "operationId": "28d709b56ade3b8ce91787e4b1e5abcb",
+                "responses": {
+                    "200": {
+                        "description": "Sync status"
+                    }
+                }
+            }
+        },
+        "/sync/status": {
+            "get": {
+                "tags": [
+                    "Sync"
+                ],
+                "summary": "Get sync status",
+                "operationId": "07f8a7a725abfc78b3ccc87edf49b91d",
+                "responses": {
+                    "200": {
+                        "description": "Sync status details"
+                    }
+                }
+            }
+        },
+        "/tickets/{id}": {
+            "get": {
+                "tags": [
+                    "Support"
+                ],
+                "summary": "Get a support ticket with messages",
+                "operationId": "6bc3075b0670d192fb57083d5a9fca9e",
+                "responses": {
+                    "200": {
+                        "description": "Ticket details"
+                    }
+                }
+            }
+        },
+        "/tickets/{id}/reply": {
+            "post": {
+                "tags": [
+                    "Support"
+                ],
+                "summary": "Reply to a support ticket",
+                "operationId": "21cebeb15e1a22f4f6fb24fc5b28d417",
+                "responses": {
+                    "201": {
+                        "description": "Reply sent"
+                    }
+                }
+            }
+        },
+        "/tickets/{id}/close": {
+            "post": {
+                "tags": [
+                    "Support"
+                ],
+                "summary": "Close a support ticket",
+                "operationId": "8feeed8a0ca49231dcb738929acc169c",
+                "responses": {
+                    "200": {
+                        "description": "Ticket closed"
+                    }
+                }
+            }
+        },
+        "/tickets/{id}/reopen": {
+            "post": {
+                "tags": [
+                    "Support"
+                ],
+                "summary": "Reopen a support ticket",
+                "operationId": "3d28438597875436b0f50a215b47deaf",
+                "responses": {
+                    "200": {
+                        "description": "Ticket reopened"
+                    }
+                }
+            }
+        },
+        "/api/v1/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "List all users",
+                "operationId": "12e989554c281d650dff75443acabf54",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 15
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Paginated list of users"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get user by ID",
+                "operationId": "a9d321d5dc6bc2613c6cf5ba92b76c89",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User details"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/assign-role": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Assign a role to a user",
+                "operationId": "999d8bd7532d6d392803f56c0d7af0c1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "role_id",
+                                    "branch_ids"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "role_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "branch_ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "uuid"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Role assigned"
+                    },
+                    "403": {
+                        "description": "Protected account"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/revoke-role": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Revoke a role from a user",
+                "operationId": "c821ef77a4924eac3779fdbc09c2e376",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "role_id",
+                                    "branch_ids"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "role_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "branch_ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "uuid"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Role revoked"
+                    },
+                    "404": {
+                        "description": "Role assignment not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/roles/all": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "List all available roles",
+                "operationId": "657e4db972cbd015191e6ef73dd7a607",
+                "responses": {
+                    "200": {
+                        "description": "List of roles"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}/roles": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get roles assigned to a user",
+                "operationId": "61876289378eda970ee9c9174beed267",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User role assignments"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Sanctum token from login endpoint",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Health",
+            "description": "System health checks"
+        },
+        {
+            "name": "Auth",
+            "description": "Authentication & registration"
+        },
+        {
+            "name": "POS",
+            "description": "Point of Sale operations"
+        },
+        {
+            "name": "Sales",
+            "description": "Sale transactions"
+        },
+        {
+            "name": "Cash Register",
+            "description": "Cash register shift management"
+        },
+        {
+            "name": "Expenses",
+            "description": "Expense tracking"
+        },
+        {
+            "name": "Returns",
+            "description": "Sales return management, approval, and refund processing"
+        },
+        {
+            "name": "Documents",
+            "description": "Quotes & invoices"
+        },
+        {
+            "name": "Users",
+            "description": "User management and role assignment"
+        },
+        {
+            "name": "PayPal",
+            "description": "PayPal payment gateway integration for subscriptions"
+        },
+        {
+            "name": "Public Plans",
+            "description": "Public subscription plan listing (no auth required)"
+        },
+        {
+            "name": "Audit",
+            "description": "Audit"
+        },
+        {
+            "name": "Admin Auth",
+            "description": "Admin Auth"
+        },
+        {
+            "name": "Admin Subscriptions",
+            "description": "Admin Subscriptions"
+        },
+        {
+            "name": "Admin Tickets",
+            "description": "Admin Tickets"
+        },
+        {
+            "name": "Admin Users",
+            "description": "Admin Users"
+        },
+        {
+            "name": "Admin Agents",
+            "description": "Admin Agents"
+        },
+        {
+            "name": "Admin Audit",
+            "description": "Admin Audit"
+        },
+        {
+            "name": "Admin Commissions",
+            "description": "Admin Commissions"
+        },
+        {
+            "name": "Admin Features",
+            "description": "Admin Features"
+        },
+        {
+            "name": "Admin Discounts",
+            "description": "Admin Discounts"
+        },
+        {
+            "name": "Admin Settings",
+            "description": "Admin Settings"
+        },
+        {
+            "name": "Admin Revenue",
+            "description": "Admin Revenue"
+        },
+        {
+            "name": "Admin Plans",
+            "description": "Admin Plans"
+        },
+        {
+            "name": "Admin Health",
+            "description": "Admin Health"
+        },
+        {
+            "name": "Admin Tenants",
+            "description": "Admin Tenants"
+        },
+        {
+            "name": "Agent",
+            "description": "Agent"
+        },
+        {
+            "name": "Agent Auth",
+            "description": "Agent Auth"
+        },
+        {
+            "name": "Accounting",
+            "description": "Accounting"
+        },
+        {
+            "name": "Billing",
+            "description": "Billing"
+        },
+        {
+            "name": "Branches",
+            "description": "Branches"
+        },
+        {
+            "name": "Categories",
+            "description": "Categories"
+        },
+        {
+            "name": "Devices",
+            "description": "Devices"
+        },
+        {
+            "name": "EFRIS",
+            "description": "EFRIS"
+        },
+        {
+            "name": "GRN",
+            "description": "GRN"
+        },
+        {
+            "name": "Integrations",
+            "description": "Integrations"
+        },
+        {
+            "name": "Inventory Adjustments",
+            "description": "Inventory Adjustments"
+        },
+        {
+            "name": "Inventory",
+            "description": "Inventory"
+        },
+        {
+            "name": "Settings",
+            "description": "Settings"
+        },
+        {
+            "name": "Loyalty",
+            "description": "Loyalty"
+        },
+        {
+            "name": "Notifications",
+            "description": "Notifications"
+        },
+        {
+            "name": "Onboarding",
+            "description": "Onboarding"
+        },
+        {
+            "name": "Payments",
+            "description": "Payments"
+        },
+        {
+            "name": "Purchase Orders",
+            "description": "Purchase Orders"
+        },
+        {
+            "name": "Reports",
+            "description": "Reports"
+        },
+        {
+            "name": "Roles",
+            "description": "Roles"
+        },
+        {
+            "name": "Stock Transfers",
+            "description": "Stock Transfers"
+        },
+        {
+            "name": "Subscriptions",
+            "description": "Subscriptions"
+        },
+        {
+            "name": "Sync",
+            "description": "Sync"
+        },
+        {
+            "name": "Support",
+            "description": "Support"
+        }
+    ]
+}
