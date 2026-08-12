@@ -77,6 +77,42 @@
         </div>
       </template>
     </section>
+
+    <!-- Backup & Export -->
+    <section class="settings-section">
+      <h2>Backup & Export</h2>
+      <p class="section-desc">Export your data or create a backup of your database.</p>
+      
+      <div class="export-actions">
+        <button @click="exportSalesCsv" :disabled="exporting" class="btn-action">
+          {{ exporting === 'sales' ? 'Exporting...' : 'Export Sales (CSV)' }}
+        </button>
+        <button @click="exportProductsCsv" :disabled="exporting" class="btn-action">
+          {{ exporting === 'products' ? 'Exporting...' : 'Export Products (CSV)' }}
+        </button>
+        <button @click="createBackup" :disabled="backingUp" class="btn-action btn-primary">
+          {{ backingUp ? 'Creating Backup...' : 'Create Database Backup' }}
+        </button>
+      </div>
+
+      <div v-if="lastBackup" class="backup-info">
+        <p class="text-green">✓ Backup created: {{ lastBackup.name }} ({{ lastBackup.size_formatted }})</p>
+      </div>
+
+      <div v-if="backups.length > 0" class="backup-list">
+        <h3>Recent Backups</h3>
+        <div v-for="backup in backups" :key="backup.name" class="backup-item">
+          <span>{{ backup.name }}</span>
+          <span class="text-muted">{{ backup.size_formatted }}</span>
+          <span class="text-muted">{{ backup.created_at }}</span>
+        </div>
+      </div>
+
+      <div class="dr-note">
+        <p><strong>Disaster Recovery Note:</strong> Backups are stored locally. For off-site backup, 
+        copy the backup file to an external drive or cloud storage regularly.</p>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -98,6 +134,77 @@ const networkIp = ref('');
 const networkPort = ref(9100);
 const licenseStatus = ref(false);
 const licenseData = ref<any>(null);
+
+// Backup & Export
+const exporting = ref('');
+const backingUp = ref(false);
+const lastBackup = ref<any>(null);
+const backups = ref<any[]>([]);
+
+// Backup & Export functions
+async function exportSalesCsv() {
+  exporting.value = 'sales';
+  try {
+    const { apiRequest } = await import('../services/ElectronBridge');
+    const resp = await apiRequest('GET', '/api/v1/export/sales/csv');
+    const blob = new Blob([resp.body], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'classicpos-sales-' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (e: any) {
+    alert('Export failed: ' + (e.message || 'Unknown error'));
+  } finally {
+    exporting.value = '';
+  }
+}
+
+async function exportProductsCsv() {
+  exporting.value = 'products';
+  try {
+    const { apiRequest } = await import('../services/ElectronBridge');
+    const resp = await apiRequest('GET', '/api/v1/export/products/csv');
+    const blob = new Blob([resp.body], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'classicpos-products-' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  } catch (e: any) {
+    alert('Export failed: ' + (e.message || 'Unknown error'));
+  } finally {
+    exporting.value = '';
+  }
+}
+
+async function createBackup() {
+  backingUp.value = true;
+  try {
+    const { apiRequest } = await import('../services/ElectronBridge');
+    const resp = await apiRequest('POST', '/api/v1/export/backup');
+    const data = JSON.parse(resp.body);
+    lastBackup.value = data;
+    loadBackups();
+  } catch (e: any) {
+    alert('Backup failed: ' + (e.message || 'Unknown error'));
+  } finally {
+    backingUp.value = false;
+  }
+}
+
+async function loadBackups() {
+  try {
+    const { apiRequest } = await import('../services/ElectronBridge');
+    const resp = await apiRequest('GET', '/api/v1/export/backups');
+    const data = JSON.parse(resp.body);
+    backups.value = data.backups || [];
+  } catch (e) {
+    // Silent fail
+  }
+}
 
 onMounted(async () => {
   version.value = await getAppVersion();
@@ -300,5 +407,88 @@ async function testPrint(printer: PrinterInfo) {
 
 .font-mono {
   font-family: monospace;
+}
+
+.section-desc {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.export-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.btn-action {
+  padding: 0.625rem 1.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-action:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.backup-info {
+  padding: 0.75rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.backup-list {
+  margin-top: 1rem;
+}
+
+.backup-list h3 {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.backup-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.85rem;
+}
+
+.text-muted {
+  color: #94a3b8;
+}
+
+.dr-note {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #92400e;
 }
 </style>

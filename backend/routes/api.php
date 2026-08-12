@@ -211,7 +211,13 @@ Route::prefix('v1')->group(function () {
 
         // Reports — requires view_reports (and export_data for CSV export)
         Route::middleware('permission:view_reports')->group(function () {
-            Route::get('/reports/summary', [ReportController::class, 'summary']);
+            // Export (backup & CSV)
+        Route::get('/export/sales/csv', [\App\Http\Controllers\Api\V1\ExportController::class, 'salesCsv']);
+        Route::get('/export/products/csv', [\App\Http\Controllers\Api\V1\ExportController::class, 'productsCsv']);
+        Route::post('/export/backup', [\App\Http\Controllers\Api\V1\ExportController::class, 'backupDatabase']);
+        Route::get('/export/backups', [\App\Http\Controllers\Api\V1\ExportController::class, 'listBackups']);
+
+        Route::get('/reports/summary', [ReportController::class, 'summary']);
             Route::get('/reports/sales-trend', [ReportController::class, 'salesTrend']);
             Route::get('/reports/top-products', [ReportController::class, 'topProducts']);
             Route::get('/reports/revenue-by-payment', [ReportController::class, 'revenueByPayment']);
