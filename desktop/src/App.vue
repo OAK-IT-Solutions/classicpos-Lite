@@ -17,12 +17,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
 import StartupScreen from './components/StartupScreen.vue';
 import ActivationWizard from './components/ActivationWizard.vue';
 import DesktopOnboarding from '@/Pages/Onboarding/DesktopOnboarding.vue';
 import AutoUpdater from './components/AutoUpdater.vue';
 import { isElectron, getStartupState } from './services/ElectronBridge';
 
+const router = useRouter();
 type Phase = 'startup' | 'activation' | 'onboarding' | 'ready';
 const phase = ref<Phase>('startup');
 
@@ -49,6 +51,7 @@ function onActivated() {
 function onOnboardingCompleted() {
   console.log('[ClassicPOS] Onboarding completed');
   phase.value = 'ready';
+  router.push('/pos');
 }
 
 // ─── Go to Login (for returning users who already completed onboarding) ────

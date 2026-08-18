@@ -1,46 +1,124 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import api from '@/composables/axios';
+<template>
+    <div class="auth-layout">
+        <div class="auth-bg">
+            <div class="bg-orb bg-orb-1"></div>
+            <div class="bg-orb bg-orb-2"></div>
+        </div>
+        <div class="auth-container" :class="wide ? 'auth-wide' : ''">
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <svg viewBox="0 0 100 100" width="48" height="48">
+                        <rect x="10" y="10" width="80" height="80" rx="16" fill="#3b82f6"/>
+                        <text x="50" y="62" text-anchor="middle" fill="white" font-size="28" font-weight="bold" font-family="system-ui">POS</text>
+                    </svg>
+                </div>
+                <h1>ClassicPOS</h1>
+                <p>Offline Desktop Point of Sale</p>
+            </div>
+            <div class="auth-card">
+                <slot />
+            </div>
+            <p class="auth-footer">&copy; {{ new Date().getFullYear() }} ClassicPOS. All rights reserved.</p>
+        </div>
+    </div>
+</template>
 
+<script setup lang="ts">
 withDefaults(defineProps<{
     wide?: boolean;
 }>(), {
     wide: false,
 });
-
-const logoUrl = ref<string | null>(null);
-
-onMounted(async () => {
-    const token = localStorage.getItem('admin_token') || localStorage.getItem('auth_token');
-    if (!token) return;
-    try {
-        const r = await api.get('/onboarding/status');
-        logoUrl.value = r.data?.profile?.logo_url ?? null;
-    } catch { /* ignore */ }
-});
 </script>
 
-<template>
-    <div class="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a]">
-        <div class="absolute inset-0 opacity-30">
-            <div class="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
-        </div>
-        <div class="w-full px-4 relative z-10" :class="wide ? 'max-w-2xl' : 'max-w-md'">
-            <div class="text-center mb-10">
-                <img v-if="logoUrl" :src="logoUrl" alt="Logo" class="h-14 w-auto mx-auto mb-4" />
-                <div v-else class="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-primary to-primary-hover rounded-2xl mb-4 shadow-lg shadow-primary/30">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
-                    </svg>
-                </div>
-                <h1 class="text-2xl font-bold text-white tracking-tight">ClassicPOS</h1>
-                <p class="text-slate-400 mt-1 text-sm">Offline Desktop Point of Sale</p>
-            </div>
-            <div class="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-8">
-                <slot />
-            </div>
-            <p class="text-center text-slate-500 text-xs mt-6">&copy; {{ new Date().getFullYear() }} ClassicPOS. All rights reserved.</p>
-        </div>
-    </div>
-</template>
+<style scoped>
+.auth-layout {
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow-y: auto;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    color: #e2e8f0;
+    padding: 2rem 1rem;
+}
+
+.auth-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.15;
+}
+
+.bg-orb-1 {
+    top: -10%;
+    left: 20%;
+    width: 500px;
+    height: 500px;
+    background: #3b82f6;
+}
+
+.bg-orb-2 {
+    bottom: -10%;
+    right: 20%;
+    width: 400px;
+    height: 400px;
+    background: #6366f1;
+}
+
+.auth-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 440px;
+}
+
+.auth-wide {
+    max-width: 640px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-logo {
+    margin-bottom: 1rem;
+}
+
+.auth-header h1 {
+    margin: 0 0 0.25rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.auth-header p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 0.875rem;
+}
+
+.auth-card {
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.auth-footer {
+    text-align: center;
+    color: #475569;
+    font-size: 0.75rem;
+    margin-top: 1.5rem;
+}
+</style>

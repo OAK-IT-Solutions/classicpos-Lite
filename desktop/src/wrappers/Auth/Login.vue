@@ -60,7 +60,7 @@ const handleLogin = async () => {
     }
     localStorage.setItem('auth_token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
-    router.push('/dashboard');
+    router.push('/pos');
   } catch (e: any) {
     error.value = e.message || 'Login failed. Please try again.';
   } finally {
