@@ -188,134 +188,91 @@ const stepLabels = ['Account', 'Business'];
 
 <template>
     <AuthLayout wide>
-        <div class="mb-8">
-            <h2 class="text-2xl font-bold text-text-theme tracking-tight">Set Up Your Business</h2>
-            <p class="text-text-tertiary text-sm mt-1">Create your admin account and configure your business in 2 quick steps</p>
+        <div class="ob-header">
+            <h2>Set Up Your Business</h2>
+            <p>Create your admin account and configure your business in 2 quick steps</p>
         </div>
 
-        <div class="flex items-center gap-3 mb-8">
+        <div class="step-indicator">
             <template v-for="(label, i) in stepLabels" :key="i">
-                <div class="flex items-center gap-2.5">
+                <div class="step-item">
                     <div
-                        class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300"
-                        :class="i + 1 < currentStep ? 'bg-emerald-500 text-white' : i + 1 === currentStep ? 'bg-primary text-white shadow-lg shadow-primary/25' : 'bg-surface-alt text-text-tertiary border border-border-light'"
+                        class="step-circle"
+                        :class="i + 1 < currentStep ? 'step-done' : i + 1 === currentStep ? 'step-active' : 'step-pending'"
                     >
-                        <svg v-if="i + 1 < currentStep" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <svg v-if="i + 1 < currentStep" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                         <span v-else>{{ i + 1 }}</span>
                     </div>
-                    <span class="text-sm font-medium hidden sm:block" :class="i + 1 === currentStep ? 'text-primary' : 'text-text-tertiary'">
-                        {{ label }}
-                    </span>
+                    <span class="step-label" :class="i + 1 === currentStep ? 'step-label-active' : ''">{{ label }}</span>
                 </div>
-                <div v-if="i < stepLabels.length - 1" class="h-px flex-1 mx-2 transition-colors duration-300" :class="i + 1 < currentStep ? 'bg-primary' : 'bg-border-light'"></div>
+                <div v-if="i < stepLabels.length - 1" class="step-line" :class="i + 1 < currentStep ? 'step-line-done' : ''"></div>
             </template>
         </div>
 
-        <div v-if="error" class="mb-6 p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-xl text-sm text-red-600 dark:text-red-400 flex items-start gap-3">
-            <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <div v-if="error" class="error-box">
+            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
             </svg>
             <div>
                 <span>{{ error }}</span>
-                <button v-if="setupAlreadyDone" @click="emit('goToLogin')" class="mt-3 block w-full py-2 px-4 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-hover transition-colors">
+                <button v-if="setupAlreadyDone" @click="emit('goToLogin')" class="go-login-btn">
                     Go to Login
                 </button>
             </div>
         </div>
 
         <Transition name="fade" mode="out-in">
-            <form v-if="currentStep === 1" @submit.prevent="nextStep" class="space-y-5">
-                <div>
-                    <label class="block text-sm font-semibold text-text-theme mb-1.5">Full Name</label>
-                    <input
-                        v-model="form.name"
-                        type="text"
-                        required
-                        class="w-full bg-surface border border-border-input rounded-xl px-4 py-3 text-sm text-text-theme placeholder:text-text-tertiary/50 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        placeholder="e.g. John Doe"
-                    />
+            <form v-if="currentStep === 1" @submit.prevent="nextStep" class="form-fields">
+                <div class="field">
+                    <label>Full Name</label>
+                    <input v-model="form.name" type="text" required placeholder="e.g. John Doe" />
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold text-text-theme mb-1.5">Work Email</label>
-                    <input
-                        v-model="form.email"
-                        type="email"
-                        required
-                        class="w-full bg-surface border border-border-input rounded-xl px-4 py-3 text-sm text-text-theme placeholder:text-text-tertiary/50 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        placeholder="you@yourbusiness.com"
-                    />
+                <div class="field">
+                    <label>Work Email</label>
+                    <input v-model="form.email" type="email" required placeholder="you@yourbusiness.com" />
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold text-text-theme mb-1.5">Password</label>
-                    <input
-                        v-model="form.password"
-                        type="password"
-                        required
-                        minlength="8"
-                        class="w-full bg-surface border border-border-input rounded-xl px-4 py-3 text-sm text-text-theme placeholder:text-text-tertiary/50 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        placeholder="At least 8 characters"
-                    />
+                <div class="field">
+                    <label>Password</label>
+                    <input v-model="form.password" type="password" required minlength="8" placeholder="At least 8 characters" />
                 </div>
-                <button
-                    type="submit"
-                    :disabled="!isValidStep1()"
-                    class="w-full bg-primary hover:bg-primary-hover text-white rounded-xl py-3 font-semibold text-sm shadow-lg shadow-primary/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-200"
-                >
+                <button type="submit" :disabled="!isValidStep1()" class="btn-primary">
                     Continue
                 </button>
             </form>
 
-            <form v-else-if="currentStep === 2" @submit.prevent="submitSetup" class="space-y-5">
-                <div>
-                    <label class="block text-sm font-semibold text-text-theme mb-1.5">Business Name</label>
-                    <input
-                        v-model="form.business_name"
-                        type="text"
-                        required
-                        class="w-full bg-surface border border-border-input rounded-xl px-4 py-3 text-sm text-text-theme placeholder:text-text-tertiary/50 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        placeholder="e.g. My Bar & Grill"
-                    />
+            <form v-else-if="currentStep === 2" @submit.prevent="submitSetup" class="form-fields">
+                <div class="field">
+                    <label>Business Name</label>
+                    <input v-model="form.business_name" type="text" required placeholder="e.g. My Bar & Grill" />
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-text-theme mb-1.5">Business Type</label>
-                        <select
-                            v-model="form.business_type"
-                            class="w-full bg-surface border border-border-input rounded-xl px-4 py-3 text-sm text-text-theme focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        >
+                <div class="field-row">
+                    <div class="field">
+                        <label>Business Type</label>
+                        <select v-model="form.business_type">
                             <option v-for="bt in businessTypes" :key="bt.value" :value="bt.value">{{ bt.label }}</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-text-theme mb-1.5">Currency</label>
-                        <select
-                            v-model="form.currency"
-                            class="w-full bg-surface border border-border-input rounded-xl px-4 py-3 text-sm text-text-theme focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        >
+                    <div class="field">
+                        <label>Currency</label>
+                        <select v-model="form.currency">
                             <option v-for="c in currencies" :key="c.value" :value="c.value">{{ c.label }}</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-semibold text-text-theme mb-1.5">Country</label>
-                        <select
-                            v-model="form.country"
-                            class="w-full bg-surface border border-border-input rounded-xl px-4 py-3 text-sm text-text-theme focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        >
+                <div class="field-row">
+                    <div class="field">
+                        <label>Country</label>
+                        <select v-model="form.country">
                             <option v-for="c in countries" :key="c.value" :value="c.value">{{ c.label }}</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-text-theme mb-1.5">Timezone</label>
-                        <select
-                            v-model="form.timezone"
-                            class="w-full bg-surface border border-border-input rounded-xl px-4 py-3 text-sm text-text-theme focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        >
+                    <div class="field">
+                        <label>Timezone</label>
+                        <select v-model="form.timezone">
                             <optgroup v-for="group in timezoneGroups" :key="group.label" :label="group.label">
                                 <option v-for="tz in group.zones" :key="tz" :value="tz">{{ tz.replace('_', ' ') }}</option>
                             </optgroup>
@@ -323,20 +280,10 @@ const stepLabels = ['Account', 'Business'];
                     </div>
                 </div>
 
-                <div class="flex gap-3 pt-3">
-                    <button
-                        type="button"
-                        @click="prevStep"
-                        class="flex-1 border-2 border-border-input text-text-secondary rounded-xl py-3 font-semibold text-sm hover:bg-surface-alt transition-all"
-                    >
-                        Back
-                    </button>
-                    <button
-                        type="submit"
-                        :disabled="!isValidStep2() || submitting"
-                        class="flex-1 bg-primary hover:bg-primary-hover text-white rounded-xl py-3 font-semibold text-sm shadow-lg shadow-primary/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-200 flex items-center justify-center gap-2"
-                    >
-                        <svg v-if="submitting" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                <div class="btn-row">
+                    <button type="button" @click="prevStep" class="btn-secondary">Back</button>
+                    <button type="submit" :disabled="!isValidStep2() || submitting" class="btn-primary">
+                        <svg v-if="submitting" class="spinner" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
@@ -349,6 +296,222 @@ const stepLabels = ['Account', 'Business'];
 </template>
 
 <style scoped>
+.ob-header {
+    margin-bottom: 2rem;
+}
+.ob-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.025em;
+}
+.ob-header p {
+    margin: 0.375rem 0 0;
+    color: #94a3b8;
+    font-size: 0.875rem;
+}
+
+.step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+}
+.step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+.step-done {
+    background: #22c55e;
+    color: white;
+}
+.step-active {
+    background: #3b82f6;
+    color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+.step-pending {
+    background: #1e293b;
+    color: #64748b;
+    border: 1px solid #334155;
+}
+.step-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #64748b;
+}
+.step-label-active {
+    color: #3b82f6;
+}
+.step-line {
+    flex: 1;
+    height: 2px;
+    background: #334155;
+    transition: background 0.3s;
+}
+.step-line-done {
+    background: #22c55e;
+}
+
+.error-box {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 12px;
+    color: #fca5a5;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+.go-login-btn {
+    margin-top: 0.75rem;
+    display: block;
+    width: 100%;
+    padding: 0.625rem 1rem;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.go-login-btn:hover {
+    background: #2563eb;
+}
+
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+.field {
+    display: flex;
+    flex-direction: column;
+}
+.field label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #cbd5e1;
+}
+.field input,
+.field select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.field input::placeholder {
+    color: #475569;
+}
+.field input:focus,
+.field select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+.field select {
+    cursor: pointer;
+    appearance: auto;
+}
+.field select option,
+.field select optgroup {
+    background: #0f172a;
+    color: #e2e8f0;
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 0.875rem;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.btn-primary:hover:not(:disabled) {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+.btn-primary:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-secondary {
+    flex: 1;
+    padding: 0.875rem;
+    background: transparent;
+    color: #94a3b8;
+    border: 2px solid #334155;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-secondary:hover {
+    background: #1e293b;
+    border-color: #475569;
+    color: #e2e8f0;
+}
+
+.btn-row {
+    display: flex;
+    gap: 0.75rem;
+    padding-top: 0.75rem;
+}
+.btn-row .btn-primary {
+    flex: 1;
+}
+
+.spinner {
+    width: 1rem;
+    height: 1rem;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+.opacity-25 { opacity: 0.25; }
+.opacity-75 { opacity: 0.75; }
+
 .fade-enter-active, .fade-leave-active {
     transition: opacity 0.15s ease, transform 0.15s ease;
 }
