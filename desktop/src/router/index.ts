@@ -77,6 +77,11 @@ const routes = [
         name: 'settings',
         component: () => import('../pages/Settings.vue'),
       },
+      {
+        path: 'reports',
+        name: 'reports',
+        component: () => import('../wrappers/Reports/Index.vue'),
+      },
     ],
   },
 ];

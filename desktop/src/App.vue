@@ -16,17 +16,38 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
 import StartupScreen from './components/StartupScreen.vue';
 import ActivationWizard from './components/ActivationWizard.vue';
 import DesktopOnboarding from '@/Pages/Onboarding/DesktopOnboarding.vue';
 import AutoUpdater from './components/AutoUpdater.vue';
 import { isElectron } from './services/ElectronBridge';
 
+const router = useRouter();
 type Phase = 'startup' | 'activation' | 'onboarding' | 'ready';
 const phase = ref<Phase>('startup');
 
+let wasOffline = false;
+
+function handleOffline() {
+  wasOffline = true;
+  if (phase.value === 'ready') {
+    router.push('/offline');
+  }
+}
+
+function handleOnline() {
+  if (wasOffline && phase.value === 'ready') {
+    wasOffline = false;
+    router.push('/');
+  }
+}
+
 onMounted(async () => {
+  window.addEventListener('offline', handleOffline);
+  window.addEventListener('online', handleOnline);
+
   if (!isElectron) {
     phase.value = 'ready';
     return;
@@ -118,6 +139,11 @@ function onActivated() {
 function onOnboardingCompleted() {
   phase.value = 'ready';
 }
+
+onUnmounted(() => {
+  window.removeEventListener('offline', handleOffline);
+  window.removeEventListener('online', handleOnline);
+});
 </script>
 
 <style>

@@ -73,10 +73,10 @@ async function handleDelete() {
                     Back to Customers
                 </button>
                 <div class="flex items-center gap-2">
-                    <router-link :href="`/customers`"
+                    <button @click="router.visit('/customers')"
                         class="px-4 py-2 bg-surface-raised border border-border-input rounded-lg text-sm font-medium text-text-secondary hover:bg-surface-alt transition-colors">
                         Edit
-                    </router-link>
+                    </button>
                     <button @click="handleDelete" :disabled="deleting"
                         class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50">
                         {{ deleting ? 'Deleting...' : 'Delete' }}

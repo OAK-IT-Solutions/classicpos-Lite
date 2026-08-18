@@ -76,13 +76,6 @@
           >
             {{ demoLoading ? 'Generating...' : 'Skip (Demo Mode)' }}
           </button>
-          <button
-            class="btn btn-outline"
-            :disabled="loading || demoLoading"
-            @click="activateDemo"
-          >
-            {{ demoLoading ? 'Generating...' : 'Generate Demo License' }}
-          </button>
         </div>
       </div>
 

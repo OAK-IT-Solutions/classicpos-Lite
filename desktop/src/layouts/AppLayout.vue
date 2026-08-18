@@ -94,6 +94,7 @@ const pageTitle = computed(() => {
     'sales.show': 'Sale Details',
     'cash-register': 'Cash Register',
     'sync-status': 'Sync Status',
+    'reports': 'Reports',
   };
   return titles[route.name as string] || 'ClassicPOS';
 });

@@ -66,7 +66,10 @@ const shiftRequired = computed(() => !openShift.value && !showOpenShift.value)
 async function openRegister() {
     if (!shiftPassword.value) { alert('Password is required.'); return; }
     try {
-        const r = await api.post(`/cash-register/open?opening_balance=${shiftOpeningBalance.value}&password=${encodeURIComponent(shiftPassword.value)}`);
+        const r = await api.post('/cash-register/open', {
+            opening_balance: shiftOpeningBalance.value,
+            password: shiftPassword.value,
+        });
         openShift.value = r.data.data;
         showOpenShift.value = false;
         shiftPassword.value = '';
@@ -77,12 +80,15 @@ async function closeRegister() {
     if (!openShift.value) return;
     if (!shiftPassword.value) { alert('Password is required.'); return; }
     try {
-        const params = `actual_balance=${shiftActualBalance.value}&password=${encodeURIComponent(shiftPassword.value)}${shiftNotes.value ? `&notes=${encodeURIComponent(shiftNotes.value)}` : ''}`;
-        await api.post(`/cash-register/${openShift.value.id}/close?${params}`);
+        await api.post(`/cash-register/${openShift.value.id}/close`, {
+            actual_balance: shiftActualBalance.value,
+            password: shiftPassword.value,
+            notes: shiftNotes.value || undefined,
+        });
         openShift.value = null;
         showCloseShift.value = false;
         shiftPassword.value = '';
-        window.location.href = '/cash-register';
+        router.visit('/cash-register');
     } catch (err: any) { alert(err?.response?.data?.error?.message || 'Failed to close register'); }
 }
 
@@ -153,7 +159,7 @@ onMounted(async () => {
     if (!auth.user.value) {
         const isAuthenticated = await auth.check();
         if (!isAuthenticated) {
-            window.location.href = '/login';
+            router.visit('/login');
             return;
         }
     }

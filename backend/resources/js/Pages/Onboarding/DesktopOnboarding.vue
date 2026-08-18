@@ -156,7 +156,7 @@ async function submitSetup() {
         }
 
         localStorage.setItem('auth_token', data.token);
-        localStorage.setItem('auth_user', JSON.stringify(data.user));
+        localStorage.setItem('user', JSON.stringify(data.user));
 
         if (isTauri) {
             emit('completed');

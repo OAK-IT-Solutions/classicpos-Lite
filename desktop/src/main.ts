@@ -8,6 +8,9 @@ import router from './router';
 import 'primeicons/primeicons.css';
 import '../../backend/resources/css/app.css';
 
+import JsBarcode from 'jsbarcode';
+(window as any).JsBarcode = JsBarcode;
+
 const app = createApp(App);
 
 app.use(router);
