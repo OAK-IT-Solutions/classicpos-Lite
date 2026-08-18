@@ -6,11 +6,13 @@ import api from '@/composables/axios';
 
 const emit = defineEmits<{
     completed: [];
+    goToLogin: [];
 }>();
 
 const currentStep = ref(1);
 const submitting = ref(false);
 const error = ref('');
+const setupAlreadyDone = ref(false);
 
 const form = ref({
     name: '',
@@ -162,7 +164,10 @@ async function submitSetup() {
         emit('completed');
     } catch (err: any) {
         const resp = err.response?.data;
-        if (resp?.error?.message) {
+        if (resp?.error?.code === 'ERR_SETUP_COMPLETE') {
+            setupAlreadyDone.value = true;
+            error.value = resp.error.message || 'Setup has already been completed.';
+        } else if (resp?.error?.message) {
             error.value = resp.error.message;
         } else if (resp?.errors) {
             error.value = Object.values(resp.errors).flat().join(', ');
@@ -212,7 +217,12 @@ const stepLabels = ['Account', 'Business'];
             <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
             </svg>
-            <span>{{ error }}</span>
+            <div>
+                <span>{{ error }}</span>
+                <button v-if="setupAlreadyDone" @click="emit('goToLogin')" class="mt-3 block w-full py-2 px-4 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-primary-hover transition-colors">
+                    Go to Login
+                </button>
+            </div>
         </div>
 
         <Transition name="fade" mode="out-in">

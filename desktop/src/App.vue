@@ -2,11 +2,11 @@
   <!-- Phase 1: Startup screen while PHP boots -->
   <StartupScreen v-if="phase === 'startup'" @ready="onServerReady" />
 
-  <!-- Phase 2: License check -->
+  <!-- Phase 2: License activation -->
   <ActivationWizard v-else-if="phase === 'activation'" @activated="onActivated" />
 
-  <!-- Phase 3: First-run onboarding (create admin user + business) -->
-  <DesktopOnboarding v-else-if="phase === 'onboarding'" @completed="onOnboardingCompleted" />
+  <!-- Phase 3: Business onboarding (admin user + business details) -->
+  <DesktopOnboarding v-else-if="phase === 'onboarding'" @completed="onOnboardingCompleted" @go-to-login="goToLogin" />
 
   <!-- Phase 4: Main app -->
   <template v-else>
@@ -33,55 +33,29 @@ let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
 function onServerReady(port: number) {
   console.log('[ClassicPOS] Server ready on port', port);
   (window as any).__PHP_BASE__ = `http://127.0.0.1:${port}`;
-
-  // Check if user already completed the full setup flow
-  const setupComplete = localStorage.getItem('classicpos_setup_complete');
-  if (setupComplete === 'true') {
-    console.log('[ClassicPOS] Setup already complete, going to login');
-    phase.value = 'ready';
-    return;
-  }
-
-  // Fresh install or incomplete setup — go through activation
-  console.log('[ClassicPOS] Setup not complete, showing activation');
+  // Always go to activation — user clicks through the full flow
   phase.value = 'activation';
 }
 
-// ─── Activation Complete Handler ───────────────────────────────────────────
+// ─── Activation Complete → always go to onboarding ─────────────────────────
 
 function onActivated() {
-  console.log('[ClassicPOS] License activated, checking setup status');
-  checkSetup();
+  console.log('[ClassicPOS] License activated, showing onboarding');
+  phase.value = 'onboarding';
 }
 
-// ─── Onboarding Complete Handler ───────────────────────────────────────────
+// ─── Onboarding Complete → ready ───────────────────────────────────────────
 
 function onOnboardingCompleted() {
   console.log('[ClassicPOS] Onboarding completed');
-  localStorage.setItem('classicpos_setup_complete', 'true');
   phase.value = 'ready';
 }
 
-// ─── Setup Check (calls backend to see if business setup is needed) ────────
+// ─── Go to Login (for returning users who already completed onboarding) ────
 
-async function checkSetup(retries = 3, delayMs = 1000) {
-  for (let attempt = 1; attempt <= retries; attempt++) {
-    try {
-      const { apiRequest } = await import('./services/ElectronBridge');
-      const resp = await apiRequest('GET', '/api/v1/desktop/setup/check');
-      const data = JSON.parse(resp.body);
-      console.log('[ClassicPOS] checkSetup response:', data);
-      phase.value = data.setup_required ? 'onboarding' : 'ready';
-      return;
-    } catch (e) {
-      console.warn(`[ClassicPOS] checkSetup attempt ${attempt}/${retries} failed:`, e);
-      if (attempt < retries) {
-        await new Promise(r => setTimeout(r, delayMs * attempt));
-      }
-    }
-  }
-  console.warn('[ClassicPOS] checkSetup all retries failed, defaulting to onboarding');
-  phase.value = 'onboarding';
+function goToLogin() {
+  console.log('[ClassicPOS] Going to login');
+  phase.value = 'ready';
 }
 
 // ─── Fallback: Poll startup state via IPC if events were missed ────────────
@@ -107,11 +81,9 @@ function startFallbackCheck() {
 
 onMounted(() => {
   if (!isElectron) {
-    // Web dev mode — skip startup, go straight to ready
     phase.value = 'ready';
     return;
   }
-  // Start fallback polling in case StartupScreen events are missed
   startFallbackCheck();
 });
 
