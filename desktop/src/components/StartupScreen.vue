@@ -34,6 +34,14 @@
         </div>
       </div>
 
+      <button
+        v-if="state.stage === 'Running'"
+        class="get-started-btn"
+        @click="handleGetStarted"
+      >
+        Get Started
+      </button>
+
       <div class="version">v{{ version }}</div>
     </div>
   </div>
@@ -43,14 +51,26 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import { isElectron, getStartupState, getAppVersion, getLogFile, onStartupState } from '../services/ElectronBridge';
 
+const emit = defineEmits<{
+  ready: [port: number];
+}>();
+
 const state = ref<any>({ stage: 'Idle' });
 const version = ref('1.0.0');
 const logFilePath = ref('');
+const serverPort = ref(0);
 let unsubStartup: (() => void) | null = null;
+
+function handleGetStarted() {
+  if (serverPort.value > 0) {
+    emit('ready', serverPort.value);
+  }
+}
 
 onMounted(async () => {
   if (!isElectron) {
     state.value = { stage: 'Running', detail: { port: 18900 } };
+    serverPort.value = 18900;
     return;
   }
 
@@ -63,7 +83,8 @@ onMounted(async () => {
     const initial = await getStartupState();
     state.value = initial;
     if (initial.stage === 'Running') {
-      const port = initial.detail?.port;
+      const port = initial.detail?.port || 0;
+      serverPort.value = port;
       (window as any).__PHP_BASE__ = `http://127.0.0.1:${port}`;
       window.dispatchEvent(new CustomEvent('classicpos:server-ready'));
       return;
@@ -74,7 +95,8 @@ onMounted(async () => {
   unsubStartup = onStartupState(async (newState: any) => {
     state.value = newState;
     if (newState.stage === 'Running') {
-      const port = newState.detail?.port;
+      const port = newState.detail?.port || 0;
+      serverPort.value = port;
       (window as any).__PHP_BASE__ = `http://127.0.0.1:${port}`;
       window.dispatchEvent(new CustomEvent('classicpos:server-ready'));
     } else if (newState.stage === 'Failed') {
@@ -184,6 +206,31 @@ onUnmounted(() => {
   font-size: 0.8rem;
   font-family: monospace;
   word-break: break-all;
+}
+
+.get-started-btn {
+  display: inline-block;
+  margin-top: 1.5rem;
+  padding: 0.875rem 3rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.025em;
+}
+
+.get-started-btn:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.get-started-btn:active {
+  transform: translateY(0);
 }
 
 .version {

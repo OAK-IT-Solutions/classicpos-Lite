@@ -1,6 +1,6 @@
 <template>
   <!-- Phase 1: Startup screen while PHP boots -->
-  <StartupScreen v-if="phase === 'startup'" />
+  <StartupScreen v-if="phase === 'startup'" @ready="onServerReady" />
 
   <!-- Phase 2: License check -->
   <ActivationWizard v-else-if="phase === 'activation'" @activated="onActivated" />
@@ -17,100 +17,52 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
 import StartupScreen from './components/StartupScreen.vue';
 import ActivationWizard from './components/ActivationWizard.vue';
 import DesktopOnboarding from '@/Pages/Onboarding/DesktopOnboarding.vue';
 import AutoUpdater from './components/AutoUpdater.vue';
-import { isElectron } from './services/ElectronBridge';
+import { isElectron, getStartupState } from './services/ElectronBridge';
 
-const router = useRouter();
 type Phase = 'startup' | 'activation' | 'onboarding' | 'ready';
 const phase = ref<Phase>('startup');
 
-let wasOffline = false;
+let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
 
-function handleOffline() {
-  wasOffline = true;
-  if (phase.value === 'ready') {
-    router.push('/offline');
-  }
-}
+// ─── Server Ready Handler (called when StartupScreen emits 'ready') ────────
 
-function handleOnline() {
-  if (wasOffline && phase.value === 'ready') {
-    wasOffline = false;
-    router.push('/');
-  }
-}
+function onServerReady(port: number) {
+  console.log('[ClassicPOS] Server ready on port', port);
+  (window as any).__PHP_BASE__ = `http://127.0.0.1:${port}`;
 
-onMounted(async () => {
-  window.addEventListener('offline', handleOffline);
-  window.addEventListener('online', handleOnline);
-
-  if (!isElectron) {
+  // Check if user already completed the full setup flow
+  const setupComplete = localStorage.getItem('classicpos_setup_complete');
+  if (setupComplete === 'true') {
+    console.log('[ClassicPOS] Setup already complete, going to login');
     phase.value = 'ready';
     return;
   }
 
-  // Listen for startup state from main process
-  window.electronAPI!.onStartupState((state: any) => {
-    if (state.stage === 'Running') {
-      const port = state.detail?.port;
-      (window as any).__PHP_BASE__ = `http://127.0.0.1:${port}`;
-      checkLicense();
-    }
-  });
-
-  // Fallback: poll __PHP_BASE__ in case the event was missed
-  scheduleFallbackCheck();
-});
-
-function scheduleFallbackCheck() {
-  setTimeout(async () => {
-    if (phase.value !== 'startup') return;
-    if ((window as any).__PHP_BASE__) {
-      await checkLicense();
-    } else {
-      scheduleFallbackCheck();
-    }
-  }, 3000);
+  // Fresh install or incomplete setup — go through activation
+  console.log('[ClassicPOS] Setup not complete, showing activation');
+  phase.value = 'activation';
 }
 
-async function checkLicense() {
-  try {
-    const stored = localStorage.getItem('classicpos_license');
-    if (stored) {
-      try {
-        const license = JSON.parse(stored);
+// ─── Activation Complete Handler ───────────────────────────────────────────
 
-        if (license && typeof license === 'object' && license.key) {
-          if (license.expires_at) {
-            const expiry = new Date(license.expires_at);
-            if (expiry < new Date()) {
-              console.log('[ClassicPOS] License expired:', license.expires_at);
-              localStorage.removeItem('classicpos_license');
-              phase.value = 'activation';
-              return;
-            }
-          }
-
-          console.log('[ClassicPOS] License found, proceeding to setup check');
-          await checkSetup();
-          return;
-        }
-      } catch (parseErr) {
-        console.warn('[ClassicPOS] Failed to parse stored license:', parseErr);
-        localStorage.removeItem('classicpos_license');
-      }
-    }
-
-    phase.value = 'activation';
-  } catch (err) {
-    console.warn('[ClassicPOS] checkLicense error:', err);
-    phase.value = 'activation';
-  }
+function onActivated() {
+  console.log('[ClassicPOS] License activated, checking setup status');
+  checkSetup();
 }
+
+// ─── Onboarding Complete Handler ───────────────────────────────────────────
+
+function onOnboardingCompleted() {
+  console.log('[ClassicPOS] Onboarding completed');
+  localStorage.setItem('classicpos_setup_complete', 'true');
+  phase.value = 'ready';
+}
+
+// ─── Setup Check (calls backend to see if business setup is needed) ────────
 
 async function checkSetup(retries = 3, delayMs = 1000) {
   for (let attempt = 1; attempt <= retries; attempt++) {
@@ -132,17 +84,39 @@ async function checkSetup(retries = 3, delayMs = 1000) {
   phase.value = 'onboarding';
 }
 
-function onActivated() {
-  checkSetup();
+// ─── Fallback: Poll startup state via IPC if events were missed ────────────
+
+function startFallbackCheck() {
+  if (!isElectron) return;
+
+  fallbackTimer = setTimeout(async () => {
+    if (phase.value !== 'startup') return;
+    try {
+      const state = await getStartupState();
+      if (state.stage === 'Running' && state.detail?.port) {
+        console.log('[ClassicPOS] Fallback: server is running on port', state.detail.port);
+        onServerReady(state.detail.port);
+        return;
+      }
+    } catch {}
+    startFallbackCheck();
+  }, 3000);
 }
 
-function onOnboardingCompleted() {
-  phase.value = 'ready';
-}
+// ─── Lifecycle ─────────────────────────────────────────────────────────────
+
+onMounted(() => {
+  if (!isElectron) {
+    // Web dev mode — skip startup, go straight to ready
+    phase.value = 'ready';
+    return;
+  }
+  // Start fallback polling in case StartupScreen events are missed
+  startFallbackCheck();
+});
 
 onUnmounted(() => {
-  window.removeEventListener('offline', handleOffline);
-  window.removeEventListener('online', handleOnline);
+  if (fallbackTimer) clearTimeout(fallbackTimer);
 });
 </script>
 

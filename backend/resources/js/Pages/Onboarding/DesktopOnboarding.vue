@@ -157,12 +157,9 @@ async function submitSetup() {
 
         localStorage.setItem('auth_token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('classicpos_setup_complete', 'true');
 
-        if (isTauri) {
-            emit('completed');
-        } else {
-            router.visit('/');
-        }
+        emit('completed');
     } catch (err: any) {
         const resp = err.response?.data;
         if (resp?.error?.message) {
