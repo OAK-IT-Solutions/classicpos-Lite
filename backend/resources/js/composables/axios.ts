@@ -97,7 +97,8 @@ api.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                const { data } = await axios.post('/api/v1/auth/refresh', null, {
+                const refreshUrl = `${getBaseUrl()}/auth/refresh`;
+                const { data } = await axios.post(refreshUrl, null, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',

@@ -51,6 +51,7 @@ export default defineConfig({
       'primevue/config': resolve(__dirname, 'node_modules/primevue/config'),
       'primevue/toast': resolve(__dirname, 'node_modules/primevue/toast'),
       'primevue/toastservice': resolve(__dirname, 'node_modules/primevue/toastservice'),
+      'primevue/confirmationservice': resolve(__dirname, 'node_modules/primevue/confirmationservice'),
       'dexie': resolve(__dirname, 'node_modules/dexie'),
       'axios': resolve(__dirname, 'node_modules/axios'),
       '@primevue/themes/aura': resolve(__dirname, 'node_modules/@primevue/themes/aura'),

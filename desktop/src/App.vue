@@ -10,25 +10,21 @@
 
   <!-- Phase 4: Main app -->
   <template v-else>
-    <AutoUpdater />
     <router-view />
   </template>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import StartupScreen from './components/StartupScreen.vue';
 import ActivationWizard from './components/ActivationWizard.vue';
 import DesktopOnboarding from '@/Pages/Onboarding/DesktopOnboarding.vue';
-import AutoUpdater from './components/AutoUpdater.vue';
-import { isElectron, getStartupState } from './services/ElectronBridge';
+import { isElectron } from './services/ElectronBridge';
 
 const router = useRouter();
 type Phase = 'startup' | 'activation' | 'onboarding' | 'ready';
 const phase = ref<Phase>('startup');
-
-let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
 
 // ─── Server Ready Handler (called when StartupScreen emits 'ready') ────────
 
@@ -76,25 +72,7 @@ function onOnboardingCompleted() {
 function goToLogin() {
   console.log('[ClassicPOS] Going to login');
   phase.value = 'ready';
-}
-
-// ─── Fallback: Poll startup state via IPC if events were missed ────────────
-
-function startFallbackCheck() {
-  if (!isElectron) return;
-
-  fallbackTimer = setTimeout(async () => {
-    if (phase.value !== 'startup') return;
-    try {
-      const state = await getStartupState();
-      if (state.stage === 'Running' && state.detail?.port) {
-        console.log('[ClassicPOS] Fallback: server is running on port', state.detail.port);
-        onServerReady(state.detail.port);
-        return;
-      }
-    } catch {}
-    startFallbackCheck();
-  }, 3000);
+  router.push('/login');
 }
 
 // ─── Lifecycle ─────────────────────────────────────────────────────────────
@@ -104,11 +82,6 @@ onMounted(() => {
     phase.value = 'ready';
     return;
   }
-  startFallbackCheck();
-});
-
-onUnmounted(() => {
-  if (fallbackTimer) clearTimeout(fallbackTimer);
 });
 </script>
 
