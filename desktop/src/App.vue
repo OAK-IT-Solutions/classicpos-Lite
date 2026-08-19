@@ -35,13 +35,30 @@ let fallbackTimer: ReturnType<typeof setTimeout> | null = null;
 function onServerReady(port: number) {
   console.log('[ClassicPOS] Server ready on port', port);
   (window as any).__PHP_BASE__ = `http://127.0.0.1:${port}`;
-  // Always go to activation — user clicks through the full flow
+
+  // Check if user already completed onboarding
+  const setupComplete = localStorage.getItem('classicpos_setup_complete');
+  if (setupComplete === 'true') {
+    console.log('[ClassicPOS] Setup already complete, going to POS');
+    phase.value = 'ready';
+    router.push('/pos');
+    return;
+  }
+
+  // First time — show activation
   phase.value = 'activation';
 }
 
-// ─── Activation Complete → always go to onboarding ─────────────────────────
+// ─── Activation Complete → check if onboarding needed ──────────────────────
 
 function onActivated() {
+  const setupComplete = localStorage.getItem('classicpos_setup_complete');
+  if (setupComplete === 'true') {
+    console.log('[ClassicPOS] Setup already complete, skipping onboarding');
+    phase.value = 'ready';
+    router.push('/pos');
+    return;
+  }
   console.log('[ClassicPOS] License activated, showing onboarding');
   phase.value = 'onboarding';
 }
