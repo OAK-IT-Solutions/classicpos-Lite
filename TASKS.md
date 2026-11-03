@@ -2,8 +2,8 @@
 
 ## Project: ClassicPOS Desktop (Offline POS System)
 ## Repo: https://github.com/OAK-IT-Solutions/classicpos-Lite
-## Date: July 18, 2026
-## Version: 1.0.0
+## Date: July 18, 2026 (updated through Nov 3, 2026)
+## Version: 1.0.6 (tag `desktop-v1.0.6`; see `BUILD_STATUS.md`)
 
 ---
 
@@ -193,6 +193,33 @@ Built a complete offline desktop POS system using **Tauri v2 + Static PHP + Lara
 | Pushed to origin/main | ✅ | |
 | Created tag desktop-v1.0.0 | ✅ | |
 | Created GitHub release (draft) | ✅ | |
+
+---
+
+### Sprint 6: Desktop Product Completeness (Aug 2026) ✅ COMPLETE
+**Goal:** Auto-updater config, local backup/export, tunnel validation, version reconciliation, cross-platform build prep (plan: `.hermes/plans/2026-08-12_sprint6-desktop-completeness.md`)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| Auto-updater configuration | ✅ | `AutoUpdater.vue` + `DesktopUpdateController` (GitHub Releases → `latest.json`) |
+| Local SQLite backup + CSV export | ✅ | `DbBackup.php` command + backup/export endpoints & UI (Settings) |
+| Cloudflare Tunnel claim validation | ✅ | `TunnelSetup.vue` + `commands/tunnel.rs` verified against real Cloudflow service flow |
+| Version reconciliation | ✅ | Release tag `desktop-v1.0.6`, `BUILD_STATUS.md` |
+| First-run onboarding | ✅ | `backend/resources/js/Pages/Onboarding/DesktopOnboarding.vue` + `CheckOnboarding.php` middleware |
+| License purchase journey | ✅ | `DesktopLicensePurchaseController` (purchase/complete/plans), email delivery, admin `desktop-licenses` panel, `landing/` $150 page |
+| Native Windows PHP binary | ✅ | Replaced Linux ELF with native Windows PE static PHP (commit `c0812b3`) |
+| CI/CD build success | ✅ | v1.0.6 NSIS + MSI + exe built on Windows GitHub Actions (10 build fixes logged in `BUILD_STATUS.md`) |
+
+---
+
+### Post-Sprint-6 / v1.0.6 Hardening (Sep–Nov 2026) ✅
+
+- Fixed Rust compile errors (serialport `vid_pid` API, rusb `read_product_string_ascii`).
+- Generated proper icons via `tauri icon`; removed invalid ico/icns; VS2019 build script + SDK shims.
+- Backend npm ci step, PHP extension additions (fileinfo, dom, tokenizer), bootstrap/cache bootstrap in CI.
+- POS landing page pricing fix — correct plan prices (`0c714fb`).
+- Bundle resources + PHP binary lookup paths; removed broken updater plugin config (`dcd1490`).
+- ⏳ **Remaining (testing):** Windows installer smoke test, full offline POS workflow, real USB printer, auto-update flow, tunnel setup, macOS/Linux cross-builds.
 
 ---
 
