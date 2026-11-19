@@ -1,5 +1,5 @@
 use std::path::PathBuf;
-use log::{info, warn, error};
+use log::info;
 
 // ─── Tunnel Configuration ──────────────────────────────────────────────────────
 

@@ -10,6 +10,13 @@
  * - Auto-migration on startup
  */
 
+// Load polyfills for missing PHP extensions (mbregex, etc.)
+$laravelRoot = $_SERVER['LARAVEL_ROOT'] ?? (file_exists(__DIR__ . '/backend') ? __DIR__ . '/backend' : dirname(__DIR__) . '/backend');
+$polyfillPath = $laravelRoot . '/bootstrap/polyfills.php';
+if (file_exists($polyfillPath)) {
+    require_once $polyfillPath;
+}
+
 // Set the document root
 $publicPath = $_SERVER['DOCUMENT_ROOT'] ?? __DIR__;
 

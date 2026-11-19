@@ -13,21 +13,25 @@
       </div>
 
       <div class="status">
-        <div v-if="status === 'starting'" class="status-bar">
+        <div v-if="state.stage === 'Idle'" class="status-bar">
           <div class="spinner"></div>
-          <span>Starting server...</span>
+          <span>Initializing...</span>
         </div>
-        <div v-else-if="status === 'migrating'" class="status-bar">
+        <div v-else-if="state.stage === 'Extracting'" class="status-bar">
           <div class="spinner"></div>
-          <span>Setting up database...</span>
+          <span>Extracting backend files...</span>
         </div>
-        <div v-else-if="status === 'ready'" class="status-bar ready">
+        <div v-else-if="state.stage === 'StartingPhp'" class="status-bar">
+          <div class="spinner"></div>
+          <span>Starting server (attempt {{ state.detail.attempt }}/3)...</span>
+        </div>
+        <div v-else-if="state.stage === 'Running'" class="status-bar ready">
           <span class="check">&#10003;</span>
           <span>Ready!</span>
         </div>
-        <div v-else-if="status === 'error'" class="status-bar error">
+        <div v-else-if="state.stage === 'Failed'" class="status-bar error">
           <span class="x-mark">&#10007;</span>
-          <span>{{ errorMessage }}</span>
+          <span>{{ state.detail.message }}</span>
         </div>
       </div>
 
@@ -37,43 +41,53 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { isTauri, startPhpServer, getAppVersion, getPhpStatus } from '../services/TauriBridge';
+import { ref, onMounted, onUnmounted } from 'vue';
+import { isTauri, getStartupState, getAppVersion } from '../services/TauriBridge';
 
-const status = ref<'starting' | 'migrating' | 'ready' | 'error'>('starting');
-const errorMessage = ref('');
+const state = ref<any>({ stage: 'Idle' });
 const version = ref('1.0.0');
+let pollTimer: ReturnType<typeof setInterval> | null = null;
+
+function isRunning(s: any): boolean {
+  return s?.stage === 'Running';
+}
+
+function isFailed(s: any): boolean {
+  return s?.stage === 'Failed';
+}
 
 onMounted(async () => {
   if (!isTauri) {
-    // Web mode — skip startup screen
-    status.value = 'ready';
+    state.value = { stage: 'Running', detail: { port: 18900 } };
     return;
   }
 
   try {
-    // Get app version
     version.value = await getAppVersion();
+  } catch {}
 
-    // Check if PHP is already running
-    const phpStatus = await getPhpStatus();
-    if (phpStatus.running) {
-      status.value = 'ready';
-      return;
+  // Poll startup state every 500ms until Running or Failed
+  pollTimer = setInterval(async () => {
+    try {
+      const s = await getStartupState();
+      state.value = s;
+
+      if (isRunning(s)) {
+        if (pollTimer) clearInterval(pollTimer);
+        const port = s.detail.port;
+        (window as any).__PHP_BASE__ = `http://127.0.0.1:${port}`;
+        window.dispatchEvent(new CustomEvent('classicpos:server-ready'));
+      } else if (isFailed(s)) {
+        if (pollTimer) clearInterval(pollTimer);
+      }
+    } catch (e) {
+      console.warn('[StartupScreen] poll error:', e);
     }
+  }, 500);
+});
 
-    // Start PHP server
-    status.value = 'starting';
-    await startPhpServer();
-
-    status.value = 'ready';
-
-    // Emit event to notify the app
-    window.dispatchEvent(new CustomEvent('classicpos:server-ready'));
-  } catch (e: any) {
-    status.value = 'error';
-    errorMessage.value = e.message || 'Failed to start server';
-  }
+onUnmounted(() => {
+  if (pollTimer) clearInterval(pollTimer);
 });
 </script>
 

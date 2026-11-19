@@ -15,7 +15,6 @@ pub fn run() {
         .setup(|app| {
             #[cfg(desktop)]
             {
-                app.handle().plugin(tauri_plugin_updater::Builder::new().build())?;
                 app.handle().plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
                     if let Some(window) = app.get_webview_window("main") {
                         let _ = window.set_focus();
@@ -28,22 +27,13 @@ pub fn run() {
             app.manage(commands::PhpPort(port));
             app.manage(commands::PhpProcess(std::sync::Mutex::new(None)));
             app.manage(commands::AppVersion(env!("CARGO_PKG_VERSION").to_string()));
+            app.manage(commands::LaravelRoot(std::sync::Mutex::new(None)));
+            app.manage(commands::StartupPhase(std::sync::Mutex::new(commands::StartupState::Idle)));
 
-            // Start PHP server in background
+            // Single background task: extract backend → start PHP → emit progress
             let handle = app.handle().clone();
-            let port_num = port;
             tauri::async_runtime::spawn(async move {
-                // Run startup script
-                eprintln!("[ClassicPOS] Running startup checks...");
-                if let Err(e) = commands::run_startup_script(&handle).await {
-                    eprintln!("[ClassicPOS] Startup check warning: {}", e);
-                }
-
-                // Start PHP server
-                match commands::start_php_server_inner(&handle, port_num).await {
-                    Ok(_) => eprintln!("[ClassicPOS] PHP server started on port {}", port_num),
-                    Err(e) => eprintln!("[ClassicPOS] Failed to start PHP server: {}", e),
-                }
+                commands::start_server_background(handle, port).await;
             });
 
             // Clean up PHP on window close
@@ -67,8 +57,9 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            // Startup
+            commands::get_startup_state,
             // PHP lifecycle
-            commands::start_php_server,
             commands::stop_php_server,
             commands::get_php_port,
             commands::get_php_status,
@@ -81,6 +72,8 @@ pub fn run() {
             commands::list_printers,
             commands::print_to_port,
             commands::open_drawer_to_port,
+            // API Proxy
+            commands::api_request,
             // Tunnel
             commands::tunnel_status,
             commands::tunnel_generate_config,

@@ -24,10 +24,9 @@ class TenantResolution
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Skip tenant resolution for admin and agent API routes — they use
-        // landlord DB directly via models with $connection = 'landlord'
+        // Skip tenant resolution for admin, agent, client, and desktop API routes
         $path = $request->path();
-        if (str_contains($path, '/v1/admin') || str_contains($path, '/v1/agent') || str_contains($path, '/v1/client')) {
+        if (str_contains($path, '/v1/admin') || str_contains($path, '/v1/agent') || str_contains($path, '/v1/client') || str_contains($path, '/v1/desktop')) {
             return $next($request);
         }
 

@@ -1,6 +1,6 @@
 # Dependencies
 node_modules/
-vendor/
+/backend/vendor/
 
 # Build outputs
 desktop/dist/
@@ -47,3 +47,18 @@ desktop/src-tauri/target/
 # Test files
 backend/test_license.php
 backend/add_route.php
+
+# Migration curation — scratch/runtime/build inputs (never commit)
+.hermes/
+*.log
+nul
+drop_test_db*.sql
+force_drop_test_db*.sql
+.env.testing
+.phpunit.result.cache
+backend/classicpos
+backend/storage/
+desktop/data/
+desktop/backend/
+desktop/source/
+*.tar

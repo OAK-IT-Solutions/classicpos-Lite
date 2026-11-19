@@ -6,6 +6,7 @@ import ConfirmationService from 'primevue/confirmationservice';
 import App from './App.vue';
 import router from './router';
 import 'primeicons/primeicons.css';
+import '../../backend/resources/css/app.css';
 
 const app = createApp(App);
 

@@ -7,6 +7,6 @@ declare module '*.vue' {
 }
 
 interface Window {
-  __TAURI__?: any;
+  __TAURI_INTERNALS__?: any;
   __VUE_ROUTER__?: any;
 }

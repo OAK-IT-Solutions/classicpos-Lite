@@ -74,6 +74,9 @@ Route::prefix('v1')->group(function () {
 
     // Desktop license endpoints (unauthenticated — used before login)
     Route::prefix('desktop')->group(function () {
+        Route::get('/startup/status', [\App\Http\Controllers\Api\V1\DesktopStartupController::class, 'status']);
+        Route::get('/setup/check', [\App\Http\Controllers\Api\V1\DesktopSetupController::class, 'check']);
+        Route::post('/setup', [\App\Http\Controllers\Api\V1\DesktopSetupController::class, 'store']);
         Route::post('/license/verify', [\App\Http\Controllers\Api\V1\DesktopLicenseController::class, 'verify']);
         Route::post('/license/activate', [\App\Http\Controllers\Api\V1\DesktopLicenseController::class, 'activate']);
         Route::get('/license/status', [\App\Http\Controllers\Api\V1\DesktopLicenseController::class, 'status']);

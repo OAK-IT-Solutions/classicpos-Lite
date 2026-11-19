@@ -1,11 +1,29 @@
 import axios from 'axios';
 
+function getBaseUrl(): string {
+    const phpBase = (window as any).__PHP_BASE__;
+    if (phpBase) {
+        return `${phpBase}/api/v1`;
+    }
+    return '/api/v1';
+}
+
 const api = axios.create({
-    baseURL: '/api/v1',
+    baseURL: getBaseUrl(),
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
     },
+});
+
+// In desktop mode, re-resolve baseURL on every request so __PHP_BASE__ is picked up
+// after the PHP server starts (it's not available when this module first loads).
+api.interceptors.request.use((config) => {
+    const phpBase = (window as any).__PHP_BASE__;
+    if (phpBase) {
+        config.baseURL = `${phpBase}/api/v1`;
+    }
+    return config;
 });
 
 function isLoginPage(): boolean {
@@ -41,8 +59,9 @@ api.interceptors.response.use(
         const originalRequest = error.config;
 
         if (error.response?.status === 401 && !originalRequest._retry) {
-            // Don't redirect away from login pages
-            if (isLoginPage()) {
+            // Don't redirect away from login, register, or onboarding pages
+            const path = window.location.pathname;
+            if (isLoginPage() || path === '/' || path.includes('/onboarding')) {
                 return Promise.reject(error);
             }
 

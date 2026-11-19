@@ -9553,4 +9553,156 @@ ext-swoole-hook-sqlite:
       ),
     ),
   ),
+  'gmssl:
+  type: library
+  artifact:
+    source:
+      type: git
+      url: \'https://github.com/guanzhi/GmSSL.git\'
+      rev: master
+    metadata:
+      license-files: [LICENSE]
+      license: Apache-2.0
+  frameworks:
+    - Security
+  static-libs@unix:
+    - libgmssl.a
+  static-libs@windows:
+    - gmssl.lib
+' => 
+  array (
+    'gmssl' => 
+    array (
+      'type' => 'library',
+      'artifact' => 
+      array (
+        'source' => 
+        array (
+          'type' => 'git',
+          'url' => 'https://github.com/guanzhi/GmSSL.git',
+          'rev' => 'master',
+        ),
+        'metadata' => 
+        array (
+          'license-files' => 
+          array (
+            0 => 'LICENSE',
+          ),
+          'license' => 'Apache-2.0',
+        ),
+      ),
+      'frameworks' => 
+      array (
+        0 => 'Security',
+      ),
+      'static-libs@unix' => 
+      array (
+        0 => 'libgmssl.a',
+      ),
+      'static-libs@windows' => 
+      array (
+        0 => 'gmssl.lib',
+      ),
+    ),
+  ),
+  'ext-brotli:
+  type: php-extension
+  artifact:
+    source:
+      type: ghtagtar
+      repo: kjdev/php-ext-brotli
+      extract: php-src/ext/brotli
+    metadata:
+      license-files: [LICENSE]
+      license: MIT
+  depends:
+    - brotli
+  php-extension:
+    arg-type: \'--enable-brotli@shared_suffix@ --with-libbrotli\'
+' => 
+  array (
+    'ext-brotli' => 
+    array (
+      'type' => 'php-extension',
+      'artifact' => 
+      array (
+        'source' => 
+        array (
+          'type' => 'ghtagtar',
+          'repo' => 'kjdev/php-ext-brotli',
+          'extract' => 'php-src/ext/brotli',
+        ),
+        'metadata' => 
+        array (
+          'license-files' => 
+          array (
+            0 => 'LICENSE',
+          ),
+          'license' => 'MIT',
+        ),
+      ),
+      'depends' => 
+      array (
+        0 => 'brotli',
+      ),
+      'php-extension' => 
+      array (
+        'arg-type' => '--enable-brotli@shared_suffix@ --with-libbrotli',
+      ),
+    ),
+  ),
+  'ext-zstd:
+  type: php-extension
+  artifact:
+    source:
+      type: ghtar
+      repo: kjdev/php-ext-zstd
+      extract: php-src/ext/zstd
+    metadata:
+      license-files: [LICENSE]
+      license: MIT
+  depends:
+    - zstd
+  suggests:
+    - ext-apcu
+  php-extension:
+    arg-type: \'--enable-zstd --with-libzstd=@build_root_path@\'
+    arg-type@windows: \'--enable-zstd\'
+' => 
+  array (
+    'ext-zstd' => 
+    array (
+      'type' => 'php-extension',
+      'artifact' => 
+      array (
+        'source' => 
+        array (
+          'type' => 'ghtar',
+          'repo' => 'kjdev/php-ext-zstd',
+          'extract' => 'php-src/ext/zstd',
+        ),
+        'metadata' => 
+        array (
+          'license-files' => 
+          array (
+            0 => 'LICENSE',
+          ),
+          'license' => 'MIT',
+        ),
+      ),
+      'depends' => 
+      array (
+        0 => 'zstd',
+      ),
+      'suggests' => 
+      array (
+        0 => 'ext-apcu',
+      ),
+      'php-extension' => 
+      array (
+        'arg-type' => '--enable-zstd --with-libzstd=@build_root_path@',
+        'arg-type@windows' => '--enable-zstd',
+      ),
+    ),
+  ),
 );

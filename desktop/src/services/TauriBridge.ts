@@ -14,7 +14,27 @@ import { invoke } from '@tauri-apps/api/core';
 
 // ─── Detection ─────────────────────────────────────────────────────────────────
 
-export const isTauri = typeof window !== 'undefined' && '__TAURI__' in window;
+export const isTauri = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
+
+// ─── Startup State ─────────────────────────────────────────────────────────────
+
+export interface StartupStateIdle { stage: 'Idle' }
+export interface StartupStateExtracting { stage: 'Extracting' }
+export interface StartupStateStartingPhp { stage: 'StartingPhp'; detail: { attempt: number } }
+export interface StartupStateRunning { stage: 'Running'; detail: { port: number } }
+export interface StartupStateFailed { stage: 'Failed'; detail: { message: string } }
+
+export type StartupState =
+  | StartupStateIdle
+  | StartupStateExtracting
+  | StartupStateStartingPhp
+  | StartupStateRunning
+  | StartupStateFailed;
+
+export async function getStartupState(): Promise<StartupState> {
+  if (!isTauri) return { stage: 'Running', detail: { port: 18900 } };
+  return invoke<StartupState>('get_startup_state');
+}
 
 // ─── PHP Server Management ─────────────────────────────────────────────────────
 
@@ -32,11 +52,6 @@ export async function getPhpPort(): Promise<number> {
 export async function getPhpStatus(): Promise<PhpStatus> {
   if (!isTauri) return { running: false, port: 18900, pid: null };
   return invoke<PhpStatus>('get_php_status');
-}
-
-export async function startPhpServer(): Promise<number> {
-  if (!isTauri) return 18900;
-  return invoke<number>('start_php_server');
 }
 
 export async function stopPhpServer(): Promise<void> {
@@ -69,11 +84,6 @@ export interface PrinterInfo {
   connected: boolean;
 }
 
-/**
- * Print ESC/POS bytes to the default printer.
- * Tries USB first, falls back to file output.
- * Returns the printer type used ('usb', 'serial', 'network', or 'file').
- */
 export async function printReceipt(bytes: number[]): Promise<string> {
   if (!isTauri) {
     console.warn('[TauriBridge] Native printing requires desktop app');
@@ -82,10 +92,6 @@ export async function printReceipt(bytes: number[]): Promise<string> {
   return invoke<string>('print_receipt', { bytes });
 }
 
-/**
- * Open cash drawer via ESC/POS pulse command.
- * Tries USB printer first.
- */
 export async function openCashDrawer(): Promise<string> {
   if (!isTauri) {
     console.warn('[TauriBridge] Cash drawer requires desktop app');
@@ -94,17 +100,11 @@ export async function openCashDrawer(): Promise<string> {
   return invoke<string>('open_drawer');
 }
 
-/**
- * List all available printers (USB + Serial).
- */
 export async function listPrinters(): Promise<PrinterInfo[]> {
   if (!isTauri) return [];
   return invoke<PrinterInfo[]>('list_printers');
 }
 
-/**
- * Print to a specific printer by type and port.
- */
 export async function printToPort(
   portType: 'usb' | 'serial' | 'network',
   portName: string,
@@ -122,9 +122,6 @@ export async function printToPort(
   });
 }
 
-/**
- * Open cash drawer on a specific printer.
- */
 export async function openDrawerToPort(
   portType: 'usb' | 'serial' | 'network',
   portName: string,
@@ -167,9 +164,6 @@ export interface DownloadProgress {
   data: { contentLength?: number; chunkLength?: number };
 }
 
-/**
- * Check for available updates from GitHub Releases.
- */
 export async function checkForUpdates(): Promise<UpdateInfo | null> {
   if (!isTauri) return null;
   try {
@@ -189,10 +183,6 @@ export async function checkForUpdates(): Promise<UpdateInfo | null> {
   }
 }
 
-/**
- * Download and install an update.
- * Returns when the update is installed and the app restarts.
- */
 export async function installUpdate(
   onProgress?: (progress: DownloadProgress) => void
 ): Promise<void> {
@@ -282,4 +272,39 @@ export async function tunnelStop(): Promise<void> {
 export async function tunnelUninstall(): Promise<void> {
   if (!isTauri) return;
   return invoke<void>('tunnel_uninstall');
+}
+
+// ─── API Proxy ────────────────────────────────────────────────────────────────
+
+export interface ApiResponse {
+  status: number;
+  body: string;
+  content_type: string;
+}
+
+/**
+ * Proxy an HTTP request to the local PHP server through the Rust backend.
+ * Bypasses webview CSP/CORS restrictions by routing through Tauri's invoke.
+ */
+export async function apiRequest(
+  method: 'GET' | 'POST',
+  path: string,
+  body?: string,
+): Promise<ApiResponse> {
+  if (!isTauri) {
+    const phpBase = (window as any).__PHP_BASE__ || 'http://127.0.0.1:18900';
+    const url = `${phpBase}${path}`;
+    const options: RequestInit = { method };
+    if (body) {
+      options.headers = { 'Content-Type': 'application/json' };
+      options.body = body;
+    }
+    const resp = await fetch(url, options);
+    return {
+      status: resp.status,
+      body: await resp.text(),
+      content_type: resp.headers.get('content-type') || 'application/octet-stream',
+    };
+  }
+  return invoke<ApiResponse>('api_request', { method, path, body: body || null });
 }

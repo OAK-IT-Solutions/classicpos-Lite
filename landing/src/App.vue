@@ -9,6 +9,7 @@ import CtaBanner from '@/components/CtaBanner.vue'
 import HowItWorks from '@/components/HowItWorks.vue'
 import Pricing from '@/components/Pricing.vue'
 import DesktopPricing from '@/components/DesktopPricing.vue'
+import SaaSPricing from '@/components/SaaSPricing.vue'
 import SelfHost from '@/components/SelfHost.vue'
 import Testimonials from '@/components/Testimonials.vue'
 import Faq from '@/components/FAQ.vue'
@@ -41,6 +42,7 @@ const isLanding = computed(() => route.name === 'home')
         <CtaBanner />
         <HowItWorks />
         <Pricing />
+        <SaaSPricing />
         <DesktopPricing />
         <CtaBanner variant="selfhost" />
         <SelfHost />

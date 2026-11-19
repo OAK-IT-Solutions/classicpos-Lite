@@ -34,7 +34,10 @@
       "icons/icon.ico"
     ],
     "resources": [
-      "binaries/*"
+      "binaries/*",
+      "backend-bundle.tar",
+      "php-router.php",
+      "php-startup.php"
     ],
     "createUpdaterArtifacts": false
   }
